@@ -1,10 +1,13 @@
-import UserTable from '../Table/UsersTable';
+import { Button, Flex, Form, Modal } from 'antd';
 import { useState } from 'react';
-import { Button, Flex, Modal } from 'antd';
+
+import UserTable from '../Table/UsersTable';
 import UserForm from '../Form/UserForm';
+import initialUserValues from './constants';
 
 const UsersPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [form] = Form.useForm();
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -38,9 +41,9 @@ const UsersPage = () => {
         maskClosable={false}
         keyboard
         onCancel={handleCancel}
-      >
+      >``
         {/* Modal content can be added here if needed */}
-        <UserForm />
+        <UserForm form={form} initialValues={initialUserValues} />
       </Modal>
     </>
   );
