@@ -5,7 +5,6 @@ import type { TableProps } from 'antd';
 import TableColumns from './tableColumns';
 import { IUser } from '@/types/user.types';
 import { useGetUsersQuery } from '../../api/endpoints/userEndpoints';
-// import dataSource from './mockdata';
 
 type TableRowSelection<T extends object = object> = TableProps<T>['rowSelection'];
 

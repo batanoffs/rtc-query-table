@@ -1,4 +1,4 @@
-import { Button, Flex, Form, Modal } from 'antd';
+import { Flex, Form, Modal } from 'antd';
 import { useState } from 'react';
 
 import UserTable from '../Table/UsersTable';
