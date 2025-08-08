@@ -3,17 +3,17 @@ import UsersPage from './components/UsersPage/UsersPage';
 
 const App = () => {
   return (
-    <Layout style={{ minHeight: '100vh', height: '100vh', width: '100vw' }}>
+    <Layout style={{ minHeight: '100dvh', backgroundColor: '#f0f2f5', maxHeight: '100dvh' }}>
       <Layout.Header style={{ color: 'white', textAlign: 'center' }}>
         <h1>Users Management</h1>
       </Layout.Header>
-      <Layout.Content style={{ padding: '20px', height: '100%', boxSizing: 'border-box' }}>
-        <div style={{ background: '#fff', minHeight: 'calc(100vh - 134px)' }}>
+      <Layout.Content style={{ paddingTop: '20px', height: '100%' }}>
+        <div style={{ background: '#fff' }}>
           <UsersPage />
         </div>
       </Layout.Content>
       <Layout.Footer style={{ textAlign: 'center' }}>
-        © 2023 Created by{' '}
+        © 2025 Created by{' '}
         <a style={{ color: 'blue', textDecoration: 'underline' }} href="https://daniel-batanov.onrender.com/">
           batanoffs
         </a>
