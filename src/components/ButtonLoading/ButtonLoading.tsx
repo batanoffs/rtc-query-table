@@ -27,27 +27,6 @@ const ButtonLoading = ({ handleSubmit, btnText }) => {
       <Button type="primary" size="large" loading={loadings[0]} onClick={() => enterLoading(0)}>
         {btnText || 'Handle Submit'}
       </Button>
-
-      {/* <Flex gap="small" wrap>
-        <Button type="primary" loading={loadings[0]} onClick={() => enterLoading(0)}>
-          Icon Start
-        </Button>
-        <Button type="primary" loading={loadings[2]} onClick={() => enterLoading(2)} iconPosition="end">
-          Icon End
-        </Button>
-        <Button type="primary" icon={<PoweroffOutlined />} loading={loadings[1]} onClick={() => enterLoading(1)}>
-          Icon Replace
-        </Button>
-        <Button type="primary" icon={<PoweroffOutlined />} loading={loadings[3]} onClick={() => enterLoading(3)} />
-        <Button
-          type="primary"
-          icon={<PoweroffOutlined />}
-          loading={loadings[3] && { icon: <SyncOutlined spin /> }}
-          onClick={() => enterLoading(3)}
-        >
-          Loading Icon
-        </Button>
-      </Flex> */}
     </Flex>
   );
 };
