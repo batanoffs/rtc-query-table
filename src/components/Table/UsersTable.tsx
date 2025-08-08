@@ -9,7 +9,7 @@ import { useGetUsersQuery } from '../../api/endpoints/userEndpoints';
 
 type TableRowSelection<T extends object = object> = TableProps<T>['rowSelection'];
 
-const UserTable = () => {
+const UserTable = ({ showModal }) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [loading, setLoading] = useState(false);
   const { data, error, isLoading } = useGetUsersQuery();
@@ -37,11 +37,17 @@ const UserTable = () => {
   const hasSelected = selectedRowKeys.length > 0;
 
   return (
-    <Flex gap="middle" align="flex-start">
-      <Button type="primary" onClick={start} disabled={!hasSelected} loading={loading}>
-        Reload
-      </Button>
-      {hasSelected ? `Selected ${selectedRowKeys.length} items` : null}
+    <>
+      <Flex gap="middle" align="flex-end" justify="flex-end" style={{ marginBottom: '16px' }}>
+        <Button type="primary" onClick={start} disabled={!hasSelected} loading={loading}>
+          Reload
+        </Button>
+
+        <Button type="primary" onClick={showModal}>
+          Create New User
+        </Button>
+        {hasSelected ? `Selected ${selectedRowKeys.length} items` : null}
+      </Flex>
 
       <Table<IUser>
         rowSelection={rowSelection}
@@ -50,7 +56,7 @@ const UserTable = () => {
         pagination={{ position: ['bottomCenter'], pageSize: 5, showSizeChanger: true }}
         rowKey="id"
       />
-    </Flex>
+    </>
   );
 };
 

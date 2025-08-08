@@ -22,13 +22,9 @@ const UsersPage = () => {
   };
 
   return (
-    <>
-      <Flex>
-        <UserTable />
-
-        <Button type="primary" onClick={showModal}>
-          Create New User
-        </Button>
+    <Flex>
+      <Flex vertical style={{ width: '100%' }}>
+        <UserTable showModal={showModal} />
       </Flex>
 
       <Modal
@@ -41,11 +37,12 @@ const UsersPage = () => {
         maskClosable={false}
         keyboard
         onCancel={handleCancel}
-      >``
+      >
+        ``
         {/* Modal content can be added here if needed */}
         <UserForm form={form} initialValues={initialUserValues} />
       </Modal>
-    </>
+    </Flex>
   );
 };
 
