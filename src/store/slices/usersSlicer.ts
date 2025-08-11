@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-// import { IUser } from '../../types/user.types';
 
 interface IUserState {
   selectedUserId: number | null;
