@@ -1,16 +1,13 @@
-import { useState } from 'react';
 import { DeleteOutlined } from '@ant-design/icons';
-import { Button, Modal, notification } from 'antd';
-import { Tooltip } from 'antd';
+import { Button, Modal, notification, Tooltip } from 'antd';
 
 import { useDeleteUserMutation, useGetUsersQuery } from '../../../api/endpoints/userEndpoints';
 
-interface rowDataProps {
+type DeleteUserModalProps = {
   userId: number;
-}
+};
 
-export const DeleteUserModal = ({ userId }: rowDataProps) => {
-  //const [isOpen, setIsOpen] = useState(false);
+export const DeleteUserModal = ({ userId }: DeleteUserModalProps) => {
   const [deleteUser] = useDeleteUserMutation();
   const { refetch: getUsers } = useGetUsersQuery();
 
