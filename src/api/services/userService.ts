@@ -1,7 +1,8 @@
 import axios from 'axios';
 
-import { IUser } from '@/types/user.types';
-import { BASE_URL } from '../constants';
+import { User } from '@/pages/UsersPage/types/user.types';
+
+const BASE_URL = 'https://jsonplaceholder.typicode.com';
 
 const urls = {
   base: BASE_URL,
@@ -9,22 +10,22 @@ const urls = {
 };
 
 const getUsers = () => {
-  return axios.get<IUser[]>(urls.users);
+  return axios.get<User[]>(urls.users);
 };
 
 const getOne = (id: string) => {
-  return axios.get<IUser>(`${urls.users}/${id}`);
+  return axios.get<User>(`${urls.users}/${id}`);
 };
 
-const createUser = (user: IUser) => {
-  return axios.post<IUser>(urls.users, user);
+const createUser = (user: User) => {
+  return axios.post<User>(urls.users, user);
 };
 
-const updateUser = (id: string, user: IUser) => {
-  return axios.put<IUser>(`${urls.users}/${id}`, user);
+const updateUser = (id: string, user: User) => {
+  return axios.put<User>(`${urls.users}/${id}`, user);
 };
 
-const deleteUser = (id: string) => {
+const deleteUser = (id: number) => {
   return axios.delete<void>(`${urls.users}/${id}`);
 };
 

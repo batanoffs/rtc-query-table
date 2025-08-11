@@ -1,87 +1,104 @@
-import RestApi from "../api";
-import UserService from "../services/userService";
-import { IUser } from '@/types/user.types';
+import RestApi from '../api';
+import UserService from '../services/userService';
+import { User } from '@/pages/UsersPage/types/user.types';
 
+// API Endpoints
+// GET	/users
+// GET	/users/1
+// POST	/users
+// PUT	/users/1
+// PATCH	/users/1
+// DELETE	/users/1
 
 const usersApi = RestApi.injectEndpoints({
-    endpoints: (builder) => ({
+  endpoints: (builder) => ({
+    getUsers: builder.query<User[], void>({
+      queryFn: async () => {
+        try {
+          const response = await UserService.getUsers();
+          return { data: response.data };
+        } catch (error) {
+          return { error };
+        }
+      },
+      providesTags: ['USERS'],
+    }),
 
-        // Get all users in the DB
-        getUsers: builder.query<IUser[], void>({
-            queryFn: async () => {
-                try {
-                    const response = await UserService.getUsers();
-                    return { data: response.data };
-                } catch (error) {
-                    return { error }
-                }
-            },
-            //TODO: What is is this tag for?
-            // This tag is used to invalidate the cache when a user is created, updated, or deleted
-            // so that the list of users is always up-to-date.??
-            providesTags: ['USERS'],
-        }),
+    getOneUser: builder.query<User, string>({
+      queryFn: async (id) => {
+        try {
+          const response = await UserService.getOne(id);
+          return { data: response.data };
+        } catch (error) {
+          return { error };
+        }
+      },
+      providesTags: ['ONE_USER'],
+    }),
 
-        // Get one user by ID
-        getOneUser: builder.query<IUser, string>({
-            queryFn: async (id) => {
-                try {
-                    const response = await UserService.getOne(id);
-                    return { data: response.data };
-                } catch (error) {
-                    return { error }
-                }
-            },
-            providesTags: ['ONE_USER'],
-        }),
+    updateUser: builder.mutation<User, { id: string; user: User }>({
+      queryFn: async ({ id, user }) => {
+        try {
+          const response = await UserService.updateUser(id, user);
+          return { data: response.data };
+        } catch (error) {
+          return { error };
+        }
+      },
+      invalidatesTags: ['USERS'],
+    }),
 
-        // Update a specific user by ID
-        updateUser: builder.mutation<IUser, { id: string; user: IUser }>({
-            queryFn: async ({ id, user }) => {
-                try {
-                    const response = await UserService.updateUser(id, user);
-                    return { data: response.data };
-                } catch (error) {
-                    return { error }
-                }
-            },
-            invalidatesTags: ['USERS'],
-        }),
+    deleteUser: builder.mutation<void, number>({
+      queryFn: async (id) => {
+        try {
+          await UserService.deleteUser(id);
+          return { data: undefined };
+        } catch (error) {
+          return { error };
+        }
+      },
+      invalidatesTags: ['USERS'],
+    }),
 
-        // Delete a specific user by ID
-        deleteUser: builder.mutation<void, string>({
-            queryFn: async (id) => {
-                try {
-                    await UserService.deleteUser(id);
-                    return { data: undefined };
-                } catch (error) {
-                    return { error }
-                }
-            },
-            invalidatesTags: ['USERS'],
-        }),
+    createUser: builder.mutation<User, User>({
+      queryFn: async (user) => {
+        try {
+          const response = await UserService.createUser(user);
+          return { data: response.data };
+        } catch (error) {
+          return { error };
+        }
+      },
+      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
+        let dispatchResult;
 
-        // Create a new user
-        createUser: builder.mutation<IUser, IUser>({
-            queryFn: async (user) => {
-                try {
-                    const response = await UserService.createUser(user);
-                    return { data: response.data };
-                } catch (error) {
-                    return { error }
-                }
-            },
-            invalidatesTags: ['USERS'],
-        }),
-    })
+        try {
+          const res = await queryFulfilled;
+
+          // Update optimistically the user data
+          dispatchResult = dispatch(
+            util.updateQueryData('getUsers', undefined, (draft) => {
+              draft.push(res.data);
+            }),
+          );
+        } catch (error) {
+          console.log(error);
+          dispatchResult.undo();
+        }
+      },
+      invalidatesTags: ['USERS'],
+    }),
+  }),
 });
 
 export const {
-    useGetUsersQuery,
-    useGetOneUserQuery,
-    useUpdateUserMutation,
-    useDeleteUserMutation,
-    useCreateUserMutation,
+  endpoints,
+  util,
+  useGetUsersQuery,
+  useGetOneUserQuery,
+  useUpdateUserMutation,
+  useDeleteUserMutation,
+  useCreateUserMutation,
 } = usersApi;
 
 export default usersApi;
