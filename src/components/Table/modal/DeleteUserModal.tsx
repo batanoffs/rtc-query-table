@@ -1,7 +1,8 @@
 import { DeleteOutlined, ExclamationCircleFilled } from '@ant-design/icons';
-import { Button, Modal, notification, Tooltip } from 'antd';
+import { Button, notification, Tooltip } from 'antd';
 
 import { useDeleteUserMutation, useGetUsersQuery } from '../../../api/endpoints/userEndpoints';
+import useModal from '../../../hooks/useModal';
 
 type DeleteUserModalProps = {
   userId: number;
@@ -12,8 +13,10 @@ export const DeleteUserModal: React.FC<DeleteUserModalProps> = ({ userId, userNa
   const [deleteUser, { isLoading }] = useDeleteUserMutation();
   const { refetch: getUsers } = useGetUsersQuery();
 
+  const { modal } = useModal();
+
   const showOnDeleteUser = () => {
-    Modal.confirm({
+    modal.confirm({
       title: 'Delete User',
       icon: <ExclamationCircleFilled />,
       content: `Are you sure that you want to delete ${userName} with id: ${userId}?`,
