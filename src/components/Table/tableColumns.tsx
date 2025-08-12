@@ -79,7 +79,7 @@ const TableColumns: TableColumn[] = [
     render: (_, rowData) => (
       <div style={{ display: 'flex', gap: '8px' }} onClick={(e) => e.stopPropagation()}>
         <EditUserModal rowData={rowData} />
-        <DeleteUserModal userId={rowData.id} />
+        <DeleteUserModal userId={rowData.id} userName={rowData.name} />
       </div>
     ),
   },
