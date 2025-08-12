@@ -2,7 +2,7 @@ import React from 'react';
 
 import { EditUserModal } from './modal/EditUserModal';
 import { DeleteUserModal } from './modal/DeleteUserModal';
-import { User } from '@/pages/UsersPage/types/user.types';
+import { User } from '@/shared/types/user.types';
 
 type TableColumn = {
   title: string;
@@ -78,7 +78,7 @@ const TableColumns: TableColumn[] = [
     key: 'actions',
     render: (_, rowData) => (
       <div style={{ display: 'flex', gap: '8px' }} onClick={(e) => e.stopPropagation()}>
-        <EditUserModal rowData={rowData} />
+        <EditUserModal rowData={rowData} userId={rowData.id} />
         <DeleteUserModal userId={rowData.id} userName={rowData.name} />
       </div>
     ),
