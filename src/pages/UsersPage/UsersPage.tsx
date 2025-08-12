@@ -4,39 +4,31 @@ import { useState } from 'react';
 import UserTable from '../../components/Table/UsersTable';
 import UserForm from './UserForm';
 
-const UsersPage = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+const UsersPage: React.FC = () => {
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
+  const toggleModal = () => {
+    setIsModalOpen((state) => !state);
   };
 
   return (
     <Flex style={{ background: '#fff' }}>
       <Flex vertical style={{ width: '100%' }}>
-        <UserTable showModal={showModal} />
+        <UserTable showModal={toggleModal} />
       </Flex>
 
       <Modal
         title="Add New User"
         closable={{ 'aria-label': 'Custom Close Button' }}
         open={isModalOpen}
-        onOk={handleOk}
+        onOk={toggleModal}
         centered
         footer={null}
         maskClosable={false}
         keyboard
-        onCancel={handleCancel}
+        onCancel={toggleModal}
       >
-        <UserForm setIsModalOpen={setIsModalOpen} />
+        <UserForm setIsModalOpen={toggleModal} />
       </Modal>
     </Flex>
   );
