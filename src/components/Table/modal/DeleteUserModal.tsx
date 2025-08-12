@@ -1,22 +1,28 @@
-import { DeleteOutlined } from '@ant-design/icons';
+import { DeleteOutlined, ExclamationCircleFilled } from '@ant-design/icons';
 import { Button, Modal, notification, Tooltip } from 'antd';
 
 import { useDeleteUserMutation, useGetUsersQuery } from '../../../api/endpoints/userEndpoints';
 
 type DeleteUserModalProps = {
   userId: number;
+  userName: string;
 };
 
-export const DeleteUserModal = ({ userId }: DeleteUserModalProps) => {
-  const [deleteUser] = useDeleteUserMutation();
+export const DeleteUserModal = ({ userId, userName }: DeleteUserModalProps) => {
+  const [deleteUser, { isLoading }] = useDeleteUserMutation();
   const { refetch: getUsers } = useGetUsersQuery();
 
-  const onDelete = () => {
+  const showOnDeleteUser = () => {
     Modal.confirm({
       title: 'Delete User',
-      content: `Are you sure that you want to delete user with ID: ${userId}?`,
-      okText: 'Yes',
-      cancelText: 'No',
+      icon: <ExclamationCircleFilled />,
+      content: `Are you sure that you want to delete ${userName} with id: ${userId}?`,
+      okText: 'Delete',
+      okButtonProps: {
+        color: 'danger',
+        danger: true,
+      },
+      cancelText: 'Cancel',
       onOk: () => {
         deleteUser(userId)
           .unwrap()
@@ -40,7 +46,13 @@ export const DeleteUserModal = ({ userId }: DeleteUserModalProps) => {
 
   return (
     <Tooltip title="Delete User">
-      <Button color="danger" variant="outlined" icon={<DeleteOutlined />} onClick={onDelete} />
+      <Button
+        color="danger"
+        variant="outlined"
+        loading={isLoading}
+        icon={<DeleteOutlined />}
+        onClick={showOnDeleteUser}
+      />
     </Tooltip>
   );
 };
