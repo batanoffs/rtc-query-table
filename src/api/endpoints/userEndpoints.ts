@@ -1,6 +1,6 @@
 import RestApi from '../api';
 import UserService from '../services/userService';
-import { User } from '@/pages/UsersPage/types/user.types';
+import { User } from '@/shared/types/user.types';
 
 // API Endpoints
 // GET	/users
@@ -24,7 +24,7 @@ const usersApi = RestApi.injectEndpoints({
       providesTags: ['USERS'],
     }),
 
-    getOneUser: builder.query<User, string>({
+    getOneUser: builder.query<User, number>({
       queryFn: async (id) => {
         try {
           const response = await UserService.getOne(id);
@@ -36,7 +36,7 @@ const usersApi = RestApi.injectEndpoints({
       providesTags: ['ONE_USER'],
     }),
 
-    updateUser: builder.mutation<User, { id: string; user: User }>({
+    updateUser: builder.mutation<User, { id: number; user: User }>({
       queryFn: async ({ id, user }) => {
         try {
           const response = await UserService.updateUser(id, user);
@@ -99,6 +99,7 @@ export const {
   useUpdateUserMutation,
   useDeleteUserMutation,
   useCreateUserMutation,
+  useLazyGetOneUserQuery
 } = usersApi;
 
 export default usersApi;
