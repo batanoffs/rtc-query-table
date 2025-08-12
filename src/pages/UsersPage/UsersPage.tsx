@@ -1,34 +1,35 @@
 import { Flex, Modal } from 'antd';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
-import UserTable from '../../components/Table/UsersTable';
-import UserForm from './UserForm';
+import AddUserForm from './AddNewUserForm';
 
-const UsersPage: React.FC = () => {
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+type UsersPageProps = {
+  Table: React.ComponentType<any>;
+};
 
-  const toggleModal = () => {
-    setIsModalOpen((state) => !state);
+const UsersPage: React.FC<UsersPageProps> = ({ Table: TableComponent }) => {
+  const [isOpen, setOpen] = useState<boolean>();
+
+  const toggleOpenClose = () => {
+    setOpen((prev) => !prev);
   };
 
   return (
-    <Flex style={{ background: '#fff' }}>
-      <Flex vertical style={{ width: '100%' }}>
-        <UserTable showModal={toggleModal} />
-      </Flex>
+    <Flex justify="center" align="center">
+      <TableComponent toggleOpenClose={toggleOpenClose} />
 
       <Modal
         title="Add New User"
         closable={{ 'aria-label': 'Custom Close Button' }}
-        open={isModalOpen}
-        onOk={toggleModal}
+        open={isOpen}
+        onOk={toggleOpenClose}
         centered
         footer={null}
-        maskClosable={false}
+        maskClosable={true}
         keyboard
-        onCancel={toggleModal}
+        onCancel={toggleOpenClose}
       >
-        <UserForm setIsModalOpen={toggleModal} />
+        <AddUserForm setIsModalOpen={toggleOpenClose} />
       </Modal>
     </Flex>
   );
