@@ -4,13 +4,12 @@ import { useState } from 'react';
 
 import { useUpdateUserMutation } from '../../../api/endpoints/userEndpoints';
 import { User } from '@/pages/UsersPage/types/user.types';
-import UserForm from '@/pages/UsersPage/UserForm';
 
 type EditUserModalProps = {
   rowData: User;
 };
 
-export const EditUserModal = ({ rowData }: EditUserModalProps) => {
+export const EditUserModal: React.FC<EditUserModalProps> = ({ rowData }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [updateUser, { isLoading }] = useUpdateUserMutation();
 
@@ -41,6 +40,9 @@ export const EditUserModal = ({ rowData }: EditUserModalProps) => {
         title={`Edit User: ${rowData.name}`}
         open={isModalOpen}
         onOk={handleSubmit}
+        okButtonProps={{
+          title: 'Create',
+        }}
         onCancel={handleCancel}
         confirmLoading={isLoading}
         width={720}

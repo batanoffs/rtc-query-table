@@ -6,7 +6,7 @@ type LayoutProps = {
   footerComponent: React.ReactNode;
 };
 
-export const MainLayout = ({ appTitle, children, footerComponent }: LayoutProps) => {
+export const MainLayout: React.FC<LayoutProps> = ({ appTitle, children, footerComponent }) => {
   return (
     <Layout style={{ minHeight: '100dvh', backgroundColor: '#f0f2f5', maxHeight: '100dvh' }}>
       <Layout.Header style={{ color: 'white', textAlign: 'center' }}>

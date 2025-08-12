@@ -8,7 +8,7 @@ type UserFormProps = {
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const UserForm = ({ setIsModalOpen }: UserFormProps) => {
+const UserForm: React.FC<UserFormProps> = ({ setIsModalOpen }) => {
   const [formData, setFormData] = useState(initialUserValues);
   const [createUser, { isLoading, isError }] = useCreateUserMutation();
 

@@ -7,7 +7,10 @@ import { User } from '@/pages/UsersPage/types/user.types';
 
 type TableRowSelection<T extends object = object> = TableProps<T>['rowSelection'];
 
-const UserTable = ({ showModal }) => {
+type UserTableProps = {
+  showModal: React.MouseEventHandler;
+};
+const UserTable: React.FC<UserTableProps> = ({ showModal }) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const { data, error, isLoading } = useGetUsersQuery();
 

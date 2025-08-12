@@ -8,7 +8,7 @@ type DeleteUserModalProps = {
   userName: string;
 };
 
-export const DeleteUserModal = ({ userId, userName }: DeleteUserModalProps) => {
+export const DeleteUserModal: React.FC<DeleteUserModalProps> = ({ userId, userName }) => {
   const [deleteUser, { isLoading }] = useDeleteUserMutation();
   const { refetch: getUsers } = useGetUsersQuery();
 
