@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { User } from '@/pages/UsersPage/types/user.types';
+import { User } from '@/shared/types/user.types';
 
 const BASE_URL = 'https://jsonplaceholder.typicode.com';
 
@@ -13,7 +13,7 @@ const getUsers = () => {
   return axios.get<User[]>(urls.users);
 };
 
-const getOne = (id: string) => {
+const getOne = (id: number) => {
   return axios.get<User>(`${urls.users}/${id}`);
 };
 
@@ -21,7 +21,7 @@ const createUser = (user: User) => {
   return axios.post<User>(urls.users, user);
 };
 
-const updateUser = (id: string, user: User) => {
+const updateUser = (id: number, user: User) => {
   return axios.put<User>(`${urls.users}/${id}`, user);
 };
 
