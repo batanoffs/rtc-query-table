@@ -1,8 +1,8 @@
 import { DeleteOutlined, ExclamationCircleFilled } from '@ant-design/icons';
 import { Button, Tooltip } from 'antd';
 
-import { useDeleteUserMutation, useGetUsersQuery } from '../../../api/endpoints/userEndpoints';
-import useModal from '../../../hooks/useModal';
+import { useDeleteUserMutation, useGetUsersQuery } from '../../api/endpoints/userEndpoints';
+import useModal from '../../hooks/useModal';
 
 type DeleteUserModalProps = {
   userId: number;
