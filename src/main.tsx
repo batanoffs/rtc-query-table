@@ -9,15 +9,18 @@ import store from './store/store';
 
 import 'antd/dist/reset.css';
 import './index.css';
-import ModalProvider from './context/Modal/ModalProvider';
+import ModalProvider from './theme/providers/Modal/ModalProvider';
+import { NotificationProvider } from './theme/providers/Notification/NotificationProvider';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ConfigProvider>
       <ModalProvider>
-        <Provider store={store}>
-          <App />
-        </Provider>
+        <NotificationProvider>
+          <Provider store={store}>
+            <App />
+          </Provider>
+        </NotificationProvider>
       </ModalProvider>
     </ConfigProvider>
   </StrictMode>,
