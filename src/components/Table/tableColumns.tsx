@@ -78,7 +78,7 @@ const TableColumns: TableColumn[] = [
     key: 'actions',
     render: (_, rowData) => (
       <div style={{ display: 'flex', gap: '8px' }} onClick={(e) => e.stopPropagation()}>
-        <EditUserModal rowData={rowData} userId={rowData.id} />
+        <EditUserModal userId={rowData.id} />
         <DeleteUserModal userId={rowData.id} userName={rowData.name} />
       </div>
     ),
