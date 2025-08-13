@@ -1,39 +1,54 @@
-import React from 'react';
-import { Form, Input, Row, Col, Button, Flex } from 'antd';
-import { User } from '@/shared/types/user.types';
+import { ChangeEventHandler, FormEventHandler, useEffect } from 'react';
+import { Form, Input, Row, Col, Button, FormInstance } from 'antd';
 
 type CreateEditFormProps = {
-  formData: User;
-  handleSubmit: React.FormEventHandler<SubmitEvent>;
-  onChangeHandler: React.FormEventHandler;
+  form: FormInstance;
+  handleSubmit: FormEventHandler<SubmitEvent>;
+  initialValues: Object | undefined;
   isLoading: boolean;
+  onChange: ChangeEventHandler;
   isDisabled: boolean;
 };
 
 const UserDataForm: React.FC<CreateEditFormProps> = ({
-  formData,
-  handleSubmit,
-  onChangeHandler,
+  form,
   isDisabled,
+  onChange,
+  handleSubmit,
+  initialValues,
   isLoading,
 }) => {
+  const onFinish = (values: any) => {
+    console.log('Received values of form: ', values);
+
+    handleSubmit;
+  };
+
+  // Set initial values when the component mounts
+  useEffect(() => {
+    if (initialValues) {
+      form.setFieldsValue(initialValues);
+    }
+  }, [initialValues, form]);
+
   return (
-    <Form layout="vertical" onFinish={handleSubmit}>
+    <Form
+      name="user-edit"
+      initialValues={initialValues}
+      onValuesChange={onChange}
+      form={form}
+      layout="vertical"
+      onFinish={onFinish}
+    >
       <Row gutter={16}>
         <Col span={12}>
-          <Form.Item initialValue={formData.name} name="name" label="Name" htmlFor="name" rules={[{ required: true }]}>
-            <Input id="name" name="name" value={formData.name} onChange={onChangeHandler} />
+          <Form.Item name="name" label="Name" htmlFor="name" rules={[{ required: true }]}>
+            <Input id="name" name="name" />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item
-            initialValue={formData.username}
-            name="username"
-            label="Username"
-            htmlFor="username"
-            rules={[{ required: true }]}
-          >
-            <Input id="username" name="username" value={formData.username} onChange={onChangeHandler} />
+          <Form.Item name="username" label="Username" htmlFor="username" rules={[{ required: true }]}>
+            <Input id="username" name="username" />
           </Form.Item>
         </Col>
       </Row>
@@ -41,97 +56,87 @@ const UserDataForm: React.FC<CreateEditFormProps> = ({
       <Row gutter={16}>
         <Col span={12}>
           <Form.Item
-            initialValue={formData.email}
             name="email"
             label="Email"
             htmlFor="email"
-            rules={[{ required: true, type: 'email' }]}
+            rules={[
+              {
+                type: 'email',
+                message: 'The input is not valid E-mail!',
+              },
+              {
+                required: true,
+                message: 'Please input your E-mail!',
+              },
+            ]}
           >
-            <Input id="email" name="email" value={formData.email} onChange={onChangeHandler} />
+            <Input id="email" name="email" />
           </Form.Item>
         </Col>
         <Col span={12}>
           <Form.Item
-            initialValue={formData.phone}
             name="phone"
             label="Phone"
             htmlFor="phone"
-            rules={[{ required: true }]}
+            rules={[{ required: true, message: 'Please input your phone number!' }]}
           >
-            <Input id="phone" name="phone" value={formData.phone} onChange={onChangeHandler} />
+            <Input id="phone" name="phone" />
           </Form.Item>
         </Col>
       </Row>
 
       <Row gutter={16}>
         <Col span={12}>
-          <Form.Item initialValue={formData.website} name="website" label="Website" htmlFor="website">
-            <Input id="website" name="website" value={formData.website} onChange={onChangeHandler} />
+          <Form.Item name="website" label="Website" htmlFor="website">
+            <Input id="website" name="website" />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item
-            initialValue={formData.company?.name}
-            name="company.name"
-            label="Company Name"
-            htmlFor="company.name"
-          >
-            <Input id="company.name" name="company.name" value={formData.company?.name} onChange={onChangeHandler} />
+          <Form.Item name={['company', 'name']} label="Company Name" htmlFor="company.name">
+            <Input id="company.name" />
           </Form.Item>
         </Col>
       </Row>
 
       <Row gutter={16}>
         <Col span={12}>
-          <Form.Item
-            initialValue={formData.address?.street}
-            name="address.street"
-            label="Street"
-            htmlFor="address.street"
-          >
-            <Input
-              id="address.street"
-              name="address.street"
-              value={formData.address?.street}
-              onChange={onChangeHandler}
-            />
+          <Form.Item name={['address', 'street']} label="Street" htmlFor="address.street">
+            <Input id="address.street" name="address.street" />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item initialValue={formData.address?.suite} name="address.suite" label="Suite" htmlFor="address.suite">
-            <Input id="address.suite" name="address.suite" value={formData.address?.suite} onChange={onChangeHandler} />
+          <Form.Item name={['address', 'suite']} label="Suite" htmlFor="address.suite">
+            <Input id="address.suite" name="address.suite" />
           </Form.Item>
         </Col>
       </Row>
 
       <Row gutter={16}>
         <Col span={12}>
-          <Form.Item initialValue={formData.address?.city} name="address.city" label="City" htmlFor="address.city">
-            <Input id="address.city" name="address.city" value={formData.address?.city} onChange={onChangeHandler} />
+          <Form.Item name={['address', 'city']} label="City" htmlFor="address.city">
+            <Input id="address.city" name="address.city" />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item
-            initialValue={formData.address?.zipcode}
-            name="address.zipcode"
-            label="Zipcode"
-            htmlFor="address.zipcode"
-          >
-            <Input
-              id="address.zipcode"
-              name="address.zipcode"
-              value={formData.address?.zipcode}
-              onChange={onChangeHandler}
-            />
+          <Form.Item name={['address', 'zipcode']} label="Zipcode" htmlFor="address.zipcode">
+            <Input id="address.zipcode" name="address.zipcode" />
           </Form.Item>
         </Col>
       </Row>
 
-      <Flex justify="end">
-        <Button type="primary" htmlType="submit" disabled={isDisabled} loading={isLoading}>
-          Submit
-        </Button>
-      </Flex>
+      <Form.Item shouldUpdate>
+        {() => (
+          <Button
+            style={{ justifySelf: 'end' }}
+            type="primary"
+            htmlType="submit"
+            disabled={isDisabled}
+            loading={isLoading}
+          >
+            Submit
+          </Button>
+        )}
+      </Form.Item>
     </Form>
   );
 };

@@ -1,38 +1,28 @@
-import { Button, Empty, Modal } from 'antd';
+import { Button, Empty, Form, Modal } from 'antd';
 import { EditFilled } from '@ant-design/icons';
 import { useState, useEffect, useCallback } from 'react';
 
-import { useLazyGetOneUserQuery, useUpdateUserMutation } from '../../../api/endpoints/userEndpoints';
+import { useLazyGetOneUserQuery, useUpdateUserMutation } from '../../api/endpoints/userEndpoints';
 import initialUserValues from '@/pages/UsersPage/constants';
 import UserDataForm from '@/components/Form/UserDataForm';
 import useModal from '@/hooks/useModal';
+import { User } from '@/shared/types/user.types';
 
 type EditUserModalProps = {
   userId?: number;
 };
 
-type FormData = typeof initialUserValues;
-
 export const EditUserModal: React.FC<EditUserModalProps> = ({ userId }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [isDisabled, setIsDisabled] = useState<boolean>(true);
-  const [formData, setFormData] = useState<FormData>(initialUserValues);
   const [fetchUser, { data, isLoading: isUserLoading }] = useLazyGetOneUserQuery();
   const [updateUser, { isLoading }] = useUpdateUserMutation();
+  const [isDisabled, setIsDisabled] = useState<boolean>(true);
+  const [form] = Form.useForm<User>();
   const { notification } = useModal();
 
   if (!userId) {
     return <Empty />;
   }
-
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-    setFormData(initialUserValues);
-  };
 
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -41,7 +31,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({ userId }) => {
     console.log({ name, value });
 
     // Set state
-    setFormData((prev) => {
+    form.setFieldsValue((prev) => {
       // Get nested keys by splitting
       const keys = name.split('.');
 
@@ -67,6 +57,15 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({ userId }) => {
     setIsDisabled(false);
   };
 
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+    setFormData(initialUserValues);
+  };
+
   const handleSubmit = async () => {
     // Try to update the user data
     try {
@@ -81,6 +80,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({ userId }) => {
 
       notification.success({ message: 'Success' });
     } catch (error) {
+      // Catch any errors
       console.error('Error updating user:', error);
 
       if (error instanceof Error) {
@@ -101,6 +101,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({ userId }) => {
 
         if (userData) {
           console.log({ userData });
+          // TODO check how to do with ant logic
           setFormData({
             id: userData.id,
             name: userData.name || '',
@@ -145,7 +146,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({ userId }) => {
       </Button>
 
       <Modal
-        title={`Edit User: ${formData.name}`}
+        title={`Edit User`}
         open={isModalOpen}
         onCancel={handleCancel}
         confirmLoading={isLoading}
@@ -155,11 +156,12 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({ userId }) => {
         loading={isUserLoading}
       >
         <UserDataForm
-          formData={formData}
+          onChange={onChangeHandler}
+          form={form}
+          initialValues={initialUserValues}
           handleSubmit={handleSubmit}
           isLoading={isLoading}
           isDisabled={isDisabled}
-          onChangeHandler={onChangeHandler}
         />
       </Modal>
     </>
