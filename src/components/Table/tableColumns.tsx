@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { EditUserModal } from './modal/EditUserModal';
-import { DeleteUserModal } from './modal/DeleteUserModal';
+import { EditUserModal } from '../Modal/EditUserModal';
+import { DeleteUserModal } from '../Modal/DeleteUserModal';
 import { User } from '@/shared/types/user.types';
 
 type TableColumn = {
