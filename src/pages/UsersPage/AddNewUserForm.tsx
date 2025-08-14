@@ -4,6 +4,7 @@ import { Form, Input, Row, Col, Button } from 'antd';
 import initialUserValues from './constants';
 import { useCreateUserMutation } from '../../api/endpoints/userEndpoints';
 import { User } from '@/shared/types/user.types';
+import useModal from '@/hooks/useModal';
 
 type UserFormProps = {
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -12,6 +13,7 @@ type UserFormProps = {
 const AddUserForm: React.FC<UserFormProps> = ({ setIsModalOpen }) => {
   const [formData, setFormData] = useState(initialUserValues);
   const [createUser, { isLoading, isError }] = useCreateUserMutation();
+  const { notification } = useModal();
 
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -22,6 +24,9 @@ const AddUserForm: React.FC<UserFormProps> = ({ setIsModalOpen }) => {
     await createUser(values);
     setFormData((prev) => ({ ...prev, initialUserValues }));
     setIsModalOpen(false);
+    notification.success({
+      message: `Done! User ${values.name} created successfully!`,
+    });
   };
 
   return (
