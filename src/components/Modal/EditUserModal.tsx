@@ -1,24 +1,24 @@
-import { Button, Empty, Form, Modal } from 'antd';
-import { EditFilled } from '@ant-design/icons';
+import { Empty, Form } from 'antd';
 import { useState, useEffect, useCallback } from 'react';
 
 import { useLazyGetOneUserQuery, useUpdateUserMutation } from '../../api/endpoints/userEndpoints';
 import initialUserValues from '@/pages/UsersPage/constants';
-import UserDataForm from '@/components/Form/UserDataForm';
+import ModalEditUser from '@/components/Modal/ModalEditUser';
 import useModal from '@/hooks/useModal';
 import { User } from '@/shared/types/user.types';
+import { useModalState } from '@/hooks/useModalState';
 
 type EditUserModalProps = {
   userId?: number;
 };
 
 export const EditUserModal: React.FC<EditUserModalProps> = ({ userId }) => {
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [fetchUser, { data, isLoading: isUserLoading }] = useLazyGetOneUserQuery();
   const [updateUser, { isLoading }] = useUpdateUserMutation();
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
   const [form] = Form.useForm<User>();
   const { notification } = useModal();
+  const { modalProps } = useModalState();
 
   if (!userId) {
     return <Empty />;
@@ -29,6 +29,8 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({ userId }) => {
 
     // Debug
     console.log({ name, value });
+
+    // form.setFieldValue('name', value);
 
     // Set state
     form.setFieldsValue((prev) => {
@@ -57,13 +59,9 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({ userId }) => {
     setIsDisabled(false);
   };
 
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
   const handleCancel = () => {
     setIsModalOpen(false);
-    setFormData(initialUserValues);
+    // setFormData(initialUserValues);
   };
 
   const handleSubmit = async () => {
@@ -122,7 +120,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({ userId }) => {
         }
       } catch (error) {
         notification.error({
-          message: `Failed to fetch data for user ${userId}`,
+          message: `Failed to get the user data`,
         });
 
         if (error instanceof Error) console.error(error.message);
@@ -130,40 +128,26 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({ userId }) => {
         console.log(error);
       }
     },
-    [fetchUser, data, userId, isModalOpen],
+    [fetchUser, data, userId, modalProps.isModalOpen],
   );
 
   useEffect(() => {
-    if (userId && isModalOpen) {
+    if (userId && modalProps.isModalOpen) {
       fetchUserDataById(userId);
     }
-  }, [userId, isModalOpen]);
+  }, [userId, modalProps.isModalOpen]);
 
   return (
-    <>
-      <Button icon={<EditFilled />} loading={isUserLoading} onClick={showModal}>
-        Edit
-      </Button>
-
-      <Modal
-        title={`Edit User`}
-        open={isModalOpen}
-        onCancel={handleCancel}
-        confirmLoading={isLoading}
-        width={720}
-        centered
-        footer={null}
-        loading={isUserLoading}
-      >
-        <UserDataForm
-          onChange={onChangeHandler}
-          form={form}
-          initialValues={initialUserValues}
-          handleSubmit={handleSubmit}
-          isLoading={isLoading}
-          isDisabled={isDisabled}
-        />
-      </Modal>
-    </>
+    <ModalEditUser
+      onChange={onChangeHandler}
+      form={form}
+      initialValues={initialUserValues}
+      handleSubmit={handleSubmit}
+      isLoading={isLoading}
+      isDisabled={isDisabled}
+      isModalOpen={modalProps.isModalOpen}
+      handleCancel={handleCancel}
+      isUserLoading={isUserLoading}
+    />
   );
 };
