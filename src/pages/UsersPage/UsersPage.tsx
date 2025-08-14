@@ -2,12 +2,13 @@ import { Flex, Modal } from 'antd';
 import React, { useState } from 'react';
 
 import AddUserForm from './AddNewUserForm';
+import ExampleFormModal from '@/components/Modal/ExampleFormModal';
 
 type UsersPageProps = {
-  Table: React.ComponentType<any>;
+  tableComponent: React.ComponentType<any>;
 };
 
-const UsersPage: React.FC<UsersPageProps> = ({ Table: TableComponent }) => {
+const UsersPage: React.FC<UsersPageProps> = ({ tableComponent: TableComponent }) => {
   const [isOpen, setOpen] = useState<boolean>();
 
   const toggleOpenClose = () => {
@@ -30,6 +31,7 @@ const UsersPage: React.FC<UsersPageProps> = ({ Table: TableComponent }) => {
         onCancel={toggleOpenClose}
       >
         <AddUserForm setIsModalOpen={toggleOpenClose} />
+        <ExampleFormModal />
       </Modal>
     </Flex>
   );
