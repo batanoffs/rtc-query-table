@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Input, Row, Col, Button } from 'antd';
+import { Form, Input, Row, Col, Button, Result } from 'antd';
 
 import initialUserValues from './constants';
 import { useCreateUserMutation } from '../../api/endpoints/userEndpoints';
@@ -10,7 +10,7 @@ type UserFormProps = {
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const AddUserForm: React.FC<UserFormProps> = ({ setIsModalOpen }) => {
+const AddUserModal: React.FC<UserFormProps> = ({ setIsModalOpen }) => {
   const [formData, setFormData] = useState(initialUserValues);
   const [createUser, { isLoading, isError }] = useCreateUserMutation();
   const { notification } = useModal();
@@ -28,6 +28,10 @@ const AddUserForm: React.FC<UserFormProps> = ({ setIsModalOpen }) => {
       message: `Done! User ${values.name} created successfully!`,
     });
   };
+
+  if (isError) {
+    return <Result status={'error'}> <p></p></Result>;
+  }
 
   return (
     <Form layout="vertical" onFinish={onFinish}>
@@ -103,4 +107,4 @@ const AddUserForm: React.FC<UserFormProps> = ({ setIsModalOpen }) => {
   );
 };
 
-export default AddUserForm;
+export default AddUserModal;
