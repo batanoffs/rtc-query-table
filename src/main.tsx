@@ -1,7 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { ConfigProvider } from 'antd';
+import { ConfigProvider, theme } from 'antd';
 import '@ant-design/v5-patch-for-react-19';
 
 import App from './App';
@@ -14,7 +14,15 @@ import { NotificationProvider } from './theme/providers/Notification/Notificatio
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <ConfigProvider>
+    <ConfigProvider
+      theme={{
+        // 1. Use dark algorithm
+        algorithm: theme.darkAlgorithm,
+
+        // 2. Combine dark algorithm and compact algorithm
+        // algorithm: [theme.darkAlgorithm, theme.compactAlgorithm],
+      }}
+    >
       <ModalProvider>
         <NotificationProvider>
           <Provider store={store}>
