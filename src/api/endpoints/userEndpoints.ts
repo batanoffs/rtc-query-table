@@ -57,7 +57,23 @@ const usersApi = RestApi.injectEndpoints({
           return { error };
         }
       },
-      invalidatesTags: ['USERS'],
+      onQueryStarted: async (id, { dispatch, queryFulfilled }) => {
+        // Optimistically remove the user from the cache
+        const patchResult = dispatch(
+          util.updateQueryData('getUsers', undefined, (users) => {
+            const index = users.findIndex((u) => u.id === id);
+            if (index !== -1) {
+              users.splice(index, 1);
+            }
+          }),
+        );
+        try {
+          await queryFulfilled;
+        } catch (error) {
+          patchResult.undo();
+        }
+      },
+      // invalidatesTags: ['USERS'],
     }),
 
     createUser: builder.mutation<User, User>({
@@ -98,7 +114,7 @@ export const {
   useUpdateUserMutation,
   useDeleteUserMutation,
   useCreateUserMutation,
-  useLazyGetOneUserQuery
+  useLazyGetOneUserQuery,
 } = usersApi;
 
 export default usersApi;

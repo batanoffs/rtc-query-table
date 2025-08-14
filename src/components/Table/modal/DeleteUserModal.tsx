@@ -35,7 +35,8 @@ export const DeleteUserModal: React.FC<DeleteUserModalProps> = ({ userId, userNa
               description: `User with ID: ${userId} has been successfully deleted.`,
             });
 
-            getUsers();
+            // I dont want to trigger refetch because of the fake REST API 
+            // getUsers();
           })
           .catch((error) => {
             notification.error({
