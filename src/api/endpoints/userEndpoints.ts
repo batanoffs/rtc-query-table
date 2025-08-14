@@ -77,8 +77,8 @@ const usersApi = RestApi.injectEndpoints({
 
           // Update optimistically the user data
           dispatchResult = dispatch(
-            util.updateQueryData('getUsers', undefined, (draft) => {
-              draft.push(res.data);
+            util.updateQueryData('getUsers', undefined, (users) => {
+              users.push(res.data);
             }),
           );
         } catch (error) {
@@ -86,7 +86,6 @@ const usersApi = RestApi.injectEndpoints({
           dispatchResult.undo();
         }
       },
-      invalidatesTags: ['USERS'],
     }),
   }),
 });
