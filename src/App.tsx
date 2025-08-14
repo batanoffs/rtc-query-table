@@ -6,7 +6,7 @@ import UserTable from './components/Table/UsersTable';
 const App: React.FC = () => {
   return (
     <MainLayout appTitle="User Management App" footerComponent={<Footer />}>
-      <UsersPage Table={UserTable} />
+      <UsersPage tableComponent={UserTable} />
     </MainLayout>
   );
 };
