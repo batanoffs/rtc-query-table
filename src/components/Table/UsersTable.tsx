@@ -1,5 +1,5 @@
 import React, { MouseEventHandler, useState } from 'react';
-import { Button, Flex, Table, TableProps } from 'antd';
+import { Button, Flex, Result, Table, TableProps } from 'antd';
 
 import TableColumns from './tableColumns';
 import { useGetUsersQuery } from '../../api/endpoints/userEndpoints';
@@ -28,7 +28,17 @@ const UserTable: React.FC<UserTableProps> = ({ toggleOpenClose }) => {
   const hasSelected = selectedRowKeys.length > 0;
 
   if (isError) {
-    // return <Alert/>
+    return (
+      <Result
+        status="error"
+        title="There are some problems with your operation."
+        extra={
+          <Button type="primary" key="console">
+            Go Console
+          </Button>
+        }
+      />
+    );
   }
 
   return (

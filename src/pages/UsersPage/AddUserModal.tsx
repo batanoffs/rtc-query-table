@@ -30,7 +30,17 @@ const AddUserModal: React.FC<UserFormProps> = ({ setIsModalOpen }) => {
   };
 
   if (isError) {
-    return <Result status={'error'}> <p></p></Result>;
+    return (
+      <Result
+        status="error"
+        title="There are some problems with your operation."
+        extra={
+          <Button type="primary" key="console">
+            Go Console
+          </Button>
+        }
+      />
+    );
   }
 
   return (
