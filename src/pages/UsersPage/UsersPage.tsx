@@ -1,7 +1,7 @@
 import { Flex, Modal } from 'antd';
 import React, { useState } from 'react';
 
-import AddUserForm from './AddNewUserForm';
+import AddUserModal from './AddUserModal';
 
 type UsersPageProps = {
   Table: React.ComponentType<any>;
@@ -29,7 +29,7 @@ const UsersPage: React.FC<UsersPageProps> = ({ Table: TableComponent }) => {
         keyboard
         onCancel={toggleOpenClose}
       >
-        <AddUserForm setIsModalOpen={toggleOpenClose} />
+        <AddUserModal setIsModalOpen={toggleOpenClose} />
       </Modal>
     </Flex>
   );
