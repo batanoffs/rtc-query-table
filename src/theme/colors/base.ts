@@ -1,8 +1,8 @@
 export const BASE_COLORS_DARK = {
   primary: '#1a7979ff',
-  textBase: '#fcfffef3',
+  textBase: '#d4e0dcf3',
   bgBase: '#0d1117',
-  bgContainer: '#4d4233ff',
+  bgContainer: '#01030cff',
   bgElevated: '#2d333b',
   bgSolid: '#0e1c2f',
   colorTextSecondary: '#8196b1',
