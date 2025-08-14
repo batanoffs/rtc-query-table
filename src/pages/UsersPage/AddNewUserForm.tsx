@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Input, Row, Col, Button } from 'antd';
+import { Form, Input, Row, Col, Button, Result, Flex } from 'antd';
 
 import initialUserValues from './constants';
 import { useCreateUserMutation } from '../../api/endpoints/userEndpoints';
@@ -23,6 +23,10 @@ const AddUserForm: React.FC<UserFormProps> = ({ setIsModalOpen }) => {
     setFormData((prev) => ({ ...prev, initialUserValues }));
     setIsModalOpen(false);
   };
+
+  if (isError) {
+    return <Result status={'error'} title={'Something when wrong'}></Result>;
+  }
 
   return (
     <Form layout="vertical" onFinish={onFinish}>
@@ -91,9 +95,16 @@ const AddUserForm: React.FC<UserFormProps> = ({ setIsModalOpen }) => {
         </Col>
       </Row>
 
-      <Button type="primary" htmlType="submit" loading={isLoading}>
-        Submit
-      </Button>
+      <Flex vertical>
+        <Button
+          style={{ alignSelf: 'flex-end', justifySelf: 'flex-end' }}
+          type="primary"
+          htmlType="submit"
+          loading={isLoading}
+        >
+          Submit
+        </Button>
+      </Flex>
     </Form>
   );
 };
