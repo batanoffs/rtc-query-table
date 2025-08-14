@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { EditUserModal } from '../Modal/EditUserModal';
 import { DeleteUserModal } from '../Modal/DeleteUserModal';
 import { User } from '@/shared/types/user.types';
+import { Button } from 'antd';
+import { EditFilled } from '@ant-design/icons';
+import { useModalState } from '@/hooks/useModalState';
 
 type TableColumn = {
   title: string;
@@ -76,12 +79,20 @@ const TableColumns: TableColumn[] = [
   {
     title: 'Actions',
     key: 'actions',
-    render: (_, rowData) => (
-      <div style={{ display: 'flex', gap: '8px' }} onClick={(e) => e.stopPropagation()}>
-        <EditUserModal userId={rowData.id} />
-        <DeleteUserModal userId={rowData.id} userName={rowData.name} />
-      </div>
-    ),
+    render: (_, rowData) => {
+      const { modalProps } = useModalState();
+
+      return (
+        <div style={{ display: 'flex', gap: '8px' }} onClick={(e) => e.stopPropagation()}>
+          {/* <EditUserModal userId={rowData.id} /> */}
+          <Button icon={<EditFilled />} onClick={modalProps.toggleModal}>
+            {/* loading={isUserLoading}  */}
+            Edit
+          </Button>
+          <DeleteUserModal userId={rowData.id} userName={rowData.name} />
+        </div>
+      );
+    },
   },
 ];
 
