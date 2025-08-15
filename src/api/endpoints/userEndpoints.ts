@@ -1,6 +1,6 @@
 import RestApi from '../api';
 import UserService from '../services/userService';
-import { User } from '@/shared/types/user.types';
+import { User } from '@/models/types/user.types';
 
 // API Endpoints
 // GET	/users

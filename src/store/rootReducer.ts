@@ -1,6 +1,6 @@
-import restApi from '../api/api';
 import { combineReducers } from '@reduxjs/toolkit';
 
+import restApi from '../api/api';
 import usersSlice from './slices/usersSlicer';
 
 const rootReducer = combineReducers({

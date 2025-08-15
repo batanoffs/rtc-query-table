@@ -1,7 +1,7 @@
 import { Flex, Modal } from 'antd';
 import React, { useState } from 'react';
 
-import AddUserModal from './AddUserModal';
+import AddUserModal from './components/modal/AddUserModal';
 
 type UsersPageProps = {
   Table: React.ComponentType<any>;

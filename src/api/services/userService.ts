@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { User } from '@/shared/types/user.types';
+import { User } from '@/models/types/user.types';
 
 const BASE_URL = 'https://jsonplaceholder.typicode.com';
 
