@@ -2,7 +2,7 @@ import { DeleteOutlined, ExclamationCircleFilled } from '@ant-design/icons';
 import { Button, Tooltip } from 'antd';
 
 import useModal from '@/hooks/useModal';
-import { useDeleteUserMutation, useGetUsersQuery } from '@/api/endpoints/userEndpoints';
+import { useDeleteUserMutation } from '@/api/endpoints/userEndpoints';
 
 type DeleteUserModalProps = {
   userId: number;
@@ -35,7 +35,7 @@ export const DeleteUserModal: React.FC<DeleteUserModalProps> = ({ userId, userNa
               description: `User with ID: ${userId} has been successfully deleted.`,
             });
 
-            // I dont want to trigger refetch because of the fake REST API 
+            // I dont want to trigger refetch because of the fake REST API
             // getUsers();
           })
           .catch((error) => {
