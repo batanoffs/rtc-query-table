@@ -55,7 +55,7 @@ const UserTable: React.FC<UserTableProps> = ({ toggleOpenClose }) => {
 
         <Table<User>
           rowSelection={rowSelection}
-          columns={TableColumns}
+          columns={TableColumns({})}
           dataSource={data}
           loading={isLoading}
           pagination={{ position: ['bottomCenter'], pageSize: 10, showSizeChanger: true }}
