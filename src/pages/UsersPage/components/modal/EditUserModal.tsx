@@ -1,25 +1,23 @@
 import { Button, Empty, Modal } from 'antd';
 import { EditFilled } from '@ant-design/icons';
-import { useState, useEffect, useCallback } from 'react';
+import { FormEvent, useState } from 'react';
 
-import { useLazyGetOneUserQuery, useUpdateUserMutation } from '@/api/endpoints/userEndpoints';
 import initialUserValues from '@/pages/UsersPage/constants/initialState';
 import UserDataForm from '@/pages/UsersPage/components/form/UserDataForm';
-import useModal from '@/hooks/useModal';
+import { useForm } from '../../hooks/useForm';
 
 type EditUserModalProps = {
   userId?: number;
 };
 
-type FormData = typeof initialUserValues;
-
 export const EditUserModal: React.FC<EditUserModalProps> = ({ userId }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [isDisabled, setIsDisabled] = useState<boolean>(true);
-  const [formData, setFormData] = useState<FormData>(initialUserValues);
-  const [fetchUser, { data, isLoading: isUserLoading }] = useLazyGetOneUserQuery();
-  const [updateUser, { isLoading }] = useUpdateUserMutation();
-  const { notification } = useModal();
+
+  const { formData, isDisabled, isLoading, isUserLoading, onChange, setFormData, onSubmit } = useForm({
+    initialState: initialUserValues,
+    isModalOpen,
+    userId,
+  });
 
   if (!userId) {
     return <Empty />;
@@ -29,114 +27,18 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({ userId }) => {
     setIsModalOpen(true);
   };
 
+  const submitHandler = (userId: number) => {
+    onSubmit(userId, setIsModalOpen);
+  };
+
+  const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    onChange(e);
+  };
+
   const handleCancel = () => {
     setIsModalOpen(false);
     setFormData(initialUserValues);
   };
-
-  const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-
-    // Debug
-    console.log({ name, value });
-
-    // Set state
-    setFormData((prev) => {
-      // Get nested keys by splitting
-      const keys = name.split('.');
-
-      // Return callback - Map the nested keys in the object for "address.street" to change the value
-      return keys.reduceRight((acc, key, index) => {
-        // Check if nesting is present
-        if (index === keys.length - 1) {
-          // Top-level property
-          return { ...prev, [key]: value };
-        }
-
-        // Else handle nesting by accessing the array index and destructuring with the spread operator
-        return {
-          ...prev,
-          [keys[0]]: {
-            ...prev[keys[0]],
-            [keys[1]]: value,
-          },
-        };
-      }, prev);
-    });
-
-    setIsDisabled(false);
-  };
-
-  const handleSubmit = async () => {
-    // Try to update the user data
-    try {
-      if (!formData.name || !formData.email || !formData.username || !formData.phone)
-        throw new Error('Required fields are empty!');
-
-      if (!userId) throw new Error('User id not found. Please refresh the page');
-
-      await updateUser({ id: userId, user: formData });
-
-      setIsModalOpen(false);
-
-      notification.success({ message: 'Success' });
-    } catch (error) {
-      console.error('Error updating user:', error);
-
-      if (error instanceof Error) {
-        notification.error({ message: error.message });
-      } else {
-        notification.error({ message: 'Whops, something went wrong' });
-      }
-    }
-  };
-
-  // Callback func to trigger data fetch
-  const fetchUserDataById = useCallback(
-    async (userId: number) => {
-      try {
-        const userData = await fetchUser(userId).unwrap();
-
-        // Debug
-        // console.log(`Fetching for User:${userId} data... /\n`, userData);
-
-        if (userData) {
-          setFormData({
-            id: userData.id,
-            name: userData.name || '',
-            username: userData.username || '',
-            email: userData.email || '',
-            phone: userData.phone || '',
-            website: userData.website || '',
-            company: {
-              name: userData.company?.name || '',
-            },
-            address: {
-              street: userData.address?.street || '',
-              suite: userData.address?.suite || '',
-              city: userData.address?.city || '',
-              zipcode: userData.address?.zipcode || '',
-            },
-          });
-        }
-      } catch (error) {
-        notification.error({
-          message: `Failed to fetch data for user ${userId}`,
-        });
-
-        if (error instanceof Error) console.error(error.message);
-
-        console.log(error);
-      }
-    },
-    [fetchUser, data, userId, isModalOpen],
-  );
-
-  useEffect(() => {
-    if (userId && isModalOpen) {
-      fetchUserDataById(userId);
-    }
-  }, [userId, isModalOpen]);
 
   return (
     <>
@@ -156,10 +58,10 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({ userId }) => {
       >
         <UserDataForm
           formData={formData}
-          handleSubmit={handleSubmit}
+          handleSubmit={submitHandler}
           isLoading={isLoading}
           isDisabled={isDisabled}
-          onChangeHandler={onChangeHandler}
+          onChangeHandler={changeHandler}
         />
       </Modal>
     </>
