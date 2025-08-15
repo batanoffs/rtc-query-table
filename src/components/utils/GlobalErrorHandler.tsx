@@ -1,7 +1,9 @@
+import { Button, Flex, Result } from 'antd';
 import React from 'react';
 
 type GlobalErrorHandlerProps = {
   children: React.ReactNode;
+  navigate: (path: string) => void; // Add navigate prop
 };
 
 type GlobalErrorHandlerState = {
@@ -28,15 +30,27 @@ class GlobalErrorHandler extends React.Component<GlobalErrorHandlerProps, Global
     this.setState({ hasError: false, error: null });
   };
 
+  handleGoBack = () => {
+    this.props.navigate('-1');
+  };
+
   render() {
     if (this.state.hasError) {
-      // Show recovery options and limit exposed details
       return (
-        <div className="error-boundary-fallback">
-          <h1>Something went wrong.</h1>
-          <p>We’re working on it. Try again?</p>
-          <button onClick={this.handleRetry}>Retry</button>
-        </div>
+        <Result
+          status="warning"
+          title="There are some problems with your operation."
+          extra={
+            <Flex gap={6}>
+              <Button type="primary" onClick={this.handleRetry}>
+                Retry
+              </Button>
+              <Button type="primary" onClick={this.handleGoBack}>
+                Go Back
+              </Button>
+            </Flex>
+          }
+        />
       );
     }
     return this.props.children;
