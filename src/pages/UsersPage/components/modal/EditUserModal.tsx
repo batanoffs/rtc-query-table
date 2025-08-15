@@ -97,10 +97,10 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({ userId }) => {
       try {
         const userData = await fetchUser(userId).unwrap();
 
-        console.log(`Fetching for User:${userId} data... /\n`, userData);
+        // Debug
+        // console.log(`Fetching for User:${userId} data... /\n`, userData);
 
         if (userData) {
-          console.log({ userData });
           setFormData({
             id: userData.id,
             name: userData.name || '',
