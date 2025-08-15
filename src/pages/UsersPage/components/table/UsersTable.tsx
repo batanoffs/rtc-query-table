@@ -16,7 +16,6 @@ const UserTable: React.FC<UserTableProps> = ({ toggleOpenClose }) => {
   const { data, isLoading, isError } = useGetUsersQuery();
 
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
-    console.log('selectedRowKeys changed: ', newSelectedRowKeys);
     setSelectedRowKeys(newSelectedRowKeys);
   };
 
