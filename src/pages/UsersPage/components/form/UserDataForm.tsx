@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form, Input, Row, Col, Button, Flex } from 'antd';
-import { User } from '@/shared/types/user.types';
+import { User } from '@/models/types/user.types';
 
 type CreateEditFormProps = {
   formData: User;

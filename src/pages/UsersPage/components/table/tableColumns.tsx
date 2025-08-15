@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { EditUserModal } from './modal/EditUserModal';
-import { DeleteUserModal } from './modal/DeleteUserModal';
-import { User } from '@/shared/types/user.types';
+import { User } from '@/models/types/user.types';
+import { EditUserModal } from '../modal/EditUserModal';
+import DeleteUserModal from '../modal/DeleteUserModal';
 
 type TableColumn = {
   title: string;

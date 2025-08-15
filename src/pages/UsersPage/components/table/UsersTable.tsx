@@ -2,8 +2,8 @@ import React, { MouseEventHandler, useState } from 'react';
 import { Button, Flex, Result, Table, TableProps } from 'antd';
 
 import TableColumns from './tableColumns';
-import { useGetUsersQuery } from '../../api/endpoints/userEndpoints';
-import { User } from '@/shared/types/user.types';
+import { User } from '@/models/types/user.types';
+import { useGetUsersQuery } from '@/api/endpoints/userEndpoints';
 
 type TableRowSelection<T extends object = object> = TableProps<T>['rowSelection'];
 

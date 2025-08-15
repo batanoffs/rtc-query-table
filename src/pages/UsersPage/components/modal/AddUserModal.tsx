@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Form, Input, Row, Col, Button, Result } from 'antd';
 
-import initialUserValues from './constants';
-import { useCreateUserMutation } from '../../api/endpoints/userEndpoints';
-import { User } from '@/shared/types/user.types';
+import initialUserValues from '../../constants/initialState';
+import { useCreateUserMutation } from '../../../../api/endpoints/userEndpoints';
+import { User } from '@/models/types/user.types';
 import useModal from '@/hooks/useModal';
 
 type UserFormProps = {

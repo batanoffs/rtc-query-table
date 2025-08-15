@@ -1,8 +1,8 @@
 import { DeleteOutlined, ExclamationCircleFilled } from '@ant-design/icons';
 import { Button, Tooltip } from 'antd';
 
-import { useDeleteUserMutation, useGetUsersQuery } from '../../../api/endpoints/userEndpoints';
-import useModal from '../../../hooks/useModal';
+import useModal from '@/hooks/useModal';
+import { useDeleteUserMutation, useGetUsersQuery } from '@/api/endpoints/userEndpoints';
 
 type DeleteUserModalProps = {
   userId: number;
@@ -11,7 +11,7 @@ type DeleteUserModalProps = {
 
 export const DeleteUserModal: React.FC<DeleteUserModalProps> = ({ userId, userName }) => {
   const [deleteUser, { isLoading }] = useDeleteUserMutation();
-  const { refetch: getUsers } = useGetUsersQuery();
+  // const { refetch: getUsers } = useGetUsersQuery();
 
   const { modal, notification } = useModal();
 

@@ -2,9 +2,9 @@ import { Button, Empty, Modal } from 'antd';
 import { EditFilled } from '@ant-design/icons';
 import { useState, useEffect, useCallback } from 'react';
 
-import { useLazyGetOneUserQuery, useUpdateUserMutation } from '../../../api/endpoints/userEndpoints';
-import initialUserValues from '@/pages/UsersPage/constants';
-import UserDataForm from '@/components/Form/UserDataForm';
+import { useLazyGetOneUserQuery, useUpdateUserMutation } from '@/api/endpoints/userEndpoints';
+import initialUserValues from '@/pages/UsersPage/constants/initialState';
+import UserDataForm from '@/pages/UsersPage/components/form/UserDataForm';
 import useModal from '@/hooks/useModal';
 
 type EditUserModalProps = {
