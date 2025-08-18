@@ -1,27 +1,17 @@
-import { useCallback, useEffect, useState } from 'react';
-
-import { useLazyGetOneUserQuery, useUpdateUserMutation } from '@/api/endpoints/userEndpoints';
-import useModal from '@/hooks/useModal';
+import { useState } from 'react';
 import { User } from '@/models/types/user.types';
 
-type FormValues = {
-  initialState: User;
-  userId?: number;
-  isModalOpen: boolean;
-};
-
-export const useForm = ({ initialState, userId, isModalOpen }: FormValues) => {
+export const useForm = (initialState: User) => {
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
   const [formData, setFormData] = useState<User>(initialState);
-  const [fetchUser, { data, isLoading: isUserLoading }] = useLazyGetOneUserQuery();
-  const [updateUser, { isLoading }] = useUpdateUserMutation();
-  const { notification } = useModal();
+
+  const handleSubmit = (onSubmit: (data: User) => void) => (event: React.FormEvent<SubmitEvent>) => {
+    onSubmit(formData);
+    resetFormHandler(event);
+  };
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-
-    // Debug
-    console.log({ name, value });
 
     // Set state
     setFormData((prev) => {
@@ -50,84 +40,17 @@ export const useForm = ({ initialState, userId, isModalOpen }: FormValues) => {
     setIsDisabled(false);
   };
 
-  const onSubmit = async (userId: number, setModalOpenClose: React.Dispatch<React.SetStateAction<boolean>>) => {
-    // Try to update the user data
-    try {
-      if (!formData.name || !formData.email || !formData.username || !formData.phone)
-        throw new Error('Required fields are empty!');
-
-      if (!userId) throw new Error('User id not found. Please refresh the page');
-
-      await updateUser({ id: userId, user: formData });
-
-      setModalOpenClose(false);
-
-      notification.success({ message: 'Success' });
-    } catch (error) {
-      console.error('Error updating user:', error);
-
-      if (error instanceof Error) {
-        notification.error({ message: error.message });
-      } else {
-        notification.error({ message: 'Whops, something went wrong' });
-      }
+  const resetFormHandler = (event?: React.FormEvent<SubmitEvent>) => {
+    if (event) {
+      setFormData(initialState);
     }
   };
 
-  // Callback func to trigger data fetch
-  const fetchUserDataById = useCallback(
-    async (userId: number) => {
-      try {
-        const userData = await fetchUser(userId).unwrap();
-
-        // Debug
-        // console.log(`Fetching for User:${userId} data... /\n`, userData);
-
-        if (userData) {
-          setFormData({
-            id: userData.id,
-            name: userData.name || '',
-            username: userData.username || '',
-            email: userData.email || '',
-            phone: userData.phone || '',
-            website: userData.website || '',
-            company: {
-              name: userData.company?.name || '',
-            },
-            address: {
-              street: userData.address?.street || '',
-              suite: userData.address?.suite || '',
-              city: userData.address?.city || '',
-              zipcode: userData.address?.zipcode || '',
-            },
-          });
-        }
-      } catch (error) {
-        notification.error({
-          message: `Failed to fetch data for user ${userId}`,
-        });
-
-        if (error instanceof Error) console.error(error.message);
-
-        console.log(error);
-      }
-    },
-    [fetchUser, data, userId, isModalOpen],
-  );
-
-  useEffect(() => {
-    if (userId && isModalOpen) {
-      fetchUserDataById(userId);
-    }
-  }, [userId, isModalOpen]);
-
   return {
-    isLoading,
-    isUserLoading,
     formData,
     isDisabled,
     onChange,
-    onSubmit,
+    handleSubmit,
     setFormData,
   };
 };
