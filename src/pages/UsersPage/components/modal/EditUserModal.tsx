@@ -1,10 +1,11 @@
-import { Button, Empty, Modal } from 'antd';
+import { useCallback, useEffect, useState } from 'react';
+import { Button, Empty, Modal, Result } from 'antd';
 import { EditFilled } from '@ant-design/icons';
-import { FormEvent, useState } from 'react';
 
 import initialUserValues from '@/pages/UsersPage/constants/initialState';
 import UserDataForm from '@/pages/UsersPage/components/form/UserDataForm';
 import { useForm } from '../../hooks/useForm';
+import { useRequestUser } from '../../hooks/useRequestUser';
 
 type EditUserModalProps = {
   userId?: number;
@@ -12,23 +13,28 @@ type EditUserModalProps = {
 
 export const EditUserModal: React.FC<EditUserModalProps> = ({ userId }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const { onEdit, isLoading, isError, fetchUserDataById, isUserLoading } = useRequestUser();
+  const { formData, isDisabled, onChange, setFormData, handleSubmit } = useForm(initialUserValues);
 
-  const { formData, isDisabled, isLoading, isUserLoading, onChange, setFormData, onSubmit } = useForm({
-    initialState: initialUserValues,
-    isModalOpen,
-    userId,
-  });
+  // TODO if no id is passed change the form to add user
+  if (!userId) return;
 
-  if (!userId) {
-    return <Empty />;
+  if (isError) {
+    return (
+      <Result
+        status="error"
+        title="There are some problems with your operation."
+        extra={
+          <Button type="primary" key="console">
+            Go Console
+          </Button>
+        }
+      />
+    );
   }
 
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const submitHandler = (userId: number) => {
-    onSubmit(userId, setIsModalOpen);
+  const onSubmit = () => {
+    onEdit(formData, userId, setIsModalOpen);
   };
 
   const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,9 +46,21 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({ userId }) => {
     setFormData(initialUserValues);
   };
 
+  const fetchUser = useCallback(() => {
+    if (userId) {
+      fetchUserDataById(userId, setFormData);
+    }
+  }, [userId, fetchUserDataById]);
+
+  useEffect(() => {
+    if (userId && isModalOpen) {
+      fetchUser();
+    }
+  }, [userId, isModalOpen]);
+
   return (
     <>
-      <Button icon={<EditFilled />} loading={isUserLoading} onClick={showModal}>
+      <Button icon={<EditFilled />} loading={isUserLoading} onClick={() => setIsModalOpen(true)}>
         Edit
       </Button>
 
@@ -58,7 +76,7 @@ export const EditUserModal: React.FC<EditUserModalProps> = ({ userId }) => {
       >
         <UserDataForm
           formData={formData}
-          handleSubmit={submitHandler}
+          handleSubmit={handleSubmit(onSubmit)}
           isLoading={isLoading}
           isDisabled={isDisabled}
           onChangeHandler={changeHandler}
