@@ -21,8 +21,8 @@ export const MainLayout: React.FC<LayoutProps> = ({ appTitle, children, footerCo
         }}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          {/* TODO icons - Sun / Moon toggle */}
           <h1 style={{ color: 'white' }}>{appTitle}</h1>
-          {/* TODO you can add icons for Sun and Moon and change them with the toggle */}
           <Switch title="Theme" defaultChecked onChange={themeCtx?.toggleTheme} />
         </div>
       </Layout.Header>
