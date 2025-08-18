@@ -1,14 +1,13 @@
-import { Flex, Modal } from 'antd';
-import React, { useState } from 'react';
-
-import AddUserModal from './components/modal/AddUserModal';
+import { Flex } from 'antd';
+import { useState } from 'react';
 
 type UsersPageProps = {
-  Table: React.ComponentType<any>;
+  table: React.ComponentType<{ toggleOpenClose: () => void }>;
+  createButton: React.ComponentType<{ toggleOpenClose: () => void; isOpen: boolean }>;
 };
 
-const UsersPage: React.FC<UsersPageProps> = ({ Table: TableComponent }) => {
-  const [isOpen, setOpen] = useState<boolean>();
+const UsersPage: React.FC<UsersPageProps> = ({ table: TableComponent, createButton: CreateUserComponent }) => {
+  const [isOpen, setOpen] = useState<boolean>(false);
 
   const toggleOpenClose = () => {
     setOpen((prev) => !prev);
@@ -17,20 +16,7 @@ const UsersPage: React.FC<UsersPageProps> = ({ Table: TableComponent }) => {
   return (
     <Flex justify="center" align="center">
       <TableComponent toggleOpenClose={toggleOpenClose} />
-
-      <Modal
-        title="Add New User"
-        closable={{ 'aria-label': 'Custom Close Button' }}
-        open={isOpen}
-        onOk={toggleOpenClose}
-        centered
-        footer={null}
-        maskClosable={true}
-        keyboard
-        onCancel={toggleOpenClose}
-      >
-        <AddUserModal setIsModalOpen={toggleOpenClose} />
-      </Modal>
+      <CreateUserComponent toggleOpenClose={toggleOpenClose} isOpen={isOpen} />
     </Flex>
   );
 };
