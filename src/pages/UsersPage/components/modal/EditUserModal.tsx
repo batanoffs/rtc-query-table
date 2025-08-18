@@ -5,7 +5,7 @@ import { EditFilled } from '@ant-design/icons';
 import initialUserValues from '@/pages/UsersPage/constants/initialState';
 import UserDataForm from '@/pages/UsersPage/components/form/UserDataForm';
 import { useForm } from '../../hooks/useForm';
-import { useRequestUser } from '../../hooks/useRequestUser';
+import { useFetchUpdateUser } from '../../hooks/useRequestUser';
 
 type EditUserModalProps = {
   userId?: number;
@@ -13,7 +13,7 @@ type EditUserModalProps = {
 
 export const EditUserModal: React.FC<EditUserModalProps> = ({ userId }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const { onEdit, isLoading, isError, fetchUserDataById, isUserLoading } = useRequestUser();
+  const { onEdit, isLoading, isError, fetchUserDataById, isUserLoading } = useFetchUpdateUser();
   const { formData, isDisabled, onChange, setFormData, handleSubmit } = useForm(initialUserValues);
 
   // TODO if no id is passed change the form to add user
