@@ -1,3 +1,6 @@
+import { useNavigate } from 'react-router-dom';
+import { FC } from 'react';
+
 import { MainLayout } from './layout/MainLayout';
 import { Footer } from './layout/Footer';
 import UsersPage from './pages/UsersPage/UsersPage';
@@ -6,9 +9,9 @@ import { ThemeProvider } from './theme/providers/ThemeProvider';
 import GlobalErrorHandler from './components/utils/GlobalErrorHandler';
 import ModalProvider from './theme/providers/Modal/ModalProvider';
 import { NotificationProvider } from './theme/providers/Notification/NotificationProvider';
-import { useNavigate } from 'react-router-dom';
+import CreateUserModal from './pages/UsersPage/components/modal/create/CreateUser';
 
-const App: React.FC = () => {
+const App: FC = () => {
   const navigate = useNavigate();
 
   return (
@@ -17,7 +20,7 @@ const App: React.FC = () => {
         <NotificationProvider>
           <ModalProvider>
             <MainLayout appTitle="User Management App" footerComponent={<Footer />}>
-              <UsersPage Table={UserTable} />
+              <UsersPage table={UserTable} createButton={CreateUserModal} />
             </MainLayout>
           </ModalProvider>
         </NotificationProvider>
