@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { Form, Input, Row, Col, Button, Result } from 'antd';
 
-import initialUserValues from '../../constants/initialState';
 import { useCreateUserMutation } from '../../../../api/endpoints/userEndpoints';
 import { User } from '@/models/types/user.types';
 import useModal from '@/hooks/useModal';
+import initialUserValues from '../../constants/initialState';
 
 type UserFormProps = {
-  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsModalOpen: (isOpen: boolean) => void;
 };
 
 const AddUserModal: React.FC<UserFormProps> = ({ setIsModalOpen }) => {
