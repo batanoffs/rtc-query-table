@@ -10,13 +10,15 @@ export const ModalProvider: FC<{ children: ReactNode }> = ({ children }) => {
     ModalService.setModalApi(modalApi);
   }, [modalApi]);
 
+  // Pass toggleOpenClose in context value
+  const contextValue = {
+    ...modalApi,
+  };
 
   return (
-    <ModalContext.Provider value={modalApi}>
+    <ModalContext.Provider value={contextValue}>
       {contextHolder}
       {children}
     </ModalContext.Provider>
   );
 };
-
-export default ModalProvider;

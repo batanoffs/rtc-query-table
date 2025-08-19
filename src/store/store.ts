@@ -7,7 +7,6 @@ import restApi from '../api/api';
 export const store = configureStore({
   reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
-    // TODO not needed when persist is not neccessery
     getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: ['persist/PERSIST'],

@@ -1,32 +1,24 @@
-import axios from 'axios';
-
-import { User } from '@/shared/types/user.types';
-
-const BASE_URL = 'https://jsonplaceholder.typicode.com';
-
-const urls = {
-  base: BASE_URL,
-  users: `${BASE_URL}/users`,
-};
+import axiosInstance from '../config/axios';
+import { User } from '@/models/types/user.types';
 
 const getUsers = () => {
-  return axios.get<User[]>(urls.users);
+  return axiosInstance.get<User[]>('/users');
 };
 
 const getOne = (id: number) => {
-  return axios.get<User>(`${urls.users}/${id}`);
+  return axiosInstance.get<User>(`/users/${id}`);
 };
 
 const createUser = (user: User) => {
-  return axios.post<User>(urls.users, user);
+  return axiosInstance.post<User>('/users', user);
 };
 
 const updateUser = (id: number, user: User) => {
-  return axios.put<User>(`${urls.users}/${id}`, user);
+  return axiosInstance.put<User>(`/users/${id}`, user);
 };
 
 const deleteUser = (id: number) => {
-  return axios.delete<void>(`${urls.users}/${id}`);
+  return axiosInstance.delete<void>(`/users/${id}`);
 };
 
 const UserService = {
@@ -35,7 +27,6 @@ const UserService = {
   createUser,
   deleteUser,
   updateUser,
-  urls,
 };
 
 export default UserService;

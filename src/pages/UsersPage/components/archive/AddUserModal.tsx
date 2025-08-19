@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
-import { Form, Input, Row, Col, Button } from 'antd';
+import { Form, Input, Row, Col, Button, Result } from 'antd';
 
-import initialUserValues from './constants';
-import { useCreateUserMutation } from '../../api/endpoints/userEndpoints';
-import { User } from '@/shared/types/user.types';
+import { useCreateUserMutation } from '../../../../api/endpoints/userEndpoints';
+import { User } from '@/models/types/user.types';
+import useModal from '@/hooks/useModal';
+import initialUserValues from '../../constants/initialState';
 
 type UserFormProps = {
-  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsModalOpen: (isOpen: boolean) => void;
 };
 
-const AddUserForm: React.FC<UserFormProps> = ({ setIsModalOpen }) => {
+const AddUserModal: React.FC<UserFormProps> = ({ setIsModalOpen }) => {
   const [formData, setFormData] = useState(initialUserValues);
   const [createUser, { isLoading, isError }] = useCreateUserMutation();
+  const { notification } = useModal();
 
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -22,7 +24,24 @@ const AddUserForm: React.FC<UserFormProps> = ({ setIsModalOpen }) => {
     await createUser(values);
     setFormData((prev) => ({ ...prev, initialUserValues }));
     setIsModalOpen(false);
+    notification.success({
+      message: `Done! User ${values.name} created successfully!`,
+    });
   };
+
+  if (isError) {
+    return (
+      <Result
+        status="error"
+        title="There are some problems with your operation."
+        extra={
+          <Button type="primary" key="console">
+            Go Console
+          </Button>
+        }
+      />
+    );
+  }
 
   return (
     <Form layout="vertical" onFinish={onFinish}>
@@ -98,4 +117,4 @@ const AddUserForm: React.FC<UserFormProps> = ({ setIsModalOpen }) => {
   );
 };
 
-export default AddUserForm;
+export default AddUserModal;

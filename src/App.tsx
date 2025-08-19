@@ -1,13 +1,26 @@
-import { MainLayout } from './layout/MainLayout';
-import { Footer } from './layout/Footer';
-import UsersPage from './pages/UsersPage/UsersPage';
-import UserTable from './components/Table/UsersTable';
+import { useNavigate } from 'react-router-dom';
+import { FC } from 'react';
 
-const App: React.FC = () => {
+import { ThemeProvider, ModalProvider, NotificationProvider } from './theme/providers';
+import { MainLayout, Footer } from './layout';
+import UsersPage from './pages/UsersPage/UsersPage';
+import GlobalErrorHandler from './components/utils/GlobalErrorHandler';
+
+const App: FC = () => {
+  const navigate = useNavigate();
+
   return (
-    <MainLayout appTitle="User Management App" footerComponent={<Footer />}>
-      <UsersPage Table={UserTable} />
-    </MainLayout>
+    <GlobalErrorHandler navigate={navigate}>
+      <ThemeProvider>
+        <NotificationProvider>
+          <ModalProvider>
+            <MainLayout appTitle="User Management App" footerComponent={<Footer />}>
+              <UsersPage />
+            </MainLayout>
+          </ModalProvider>
+        </NotificationProvider>
+      </ThemeProvider>
+    </GlobalErrorHandler>
   );
 };
 

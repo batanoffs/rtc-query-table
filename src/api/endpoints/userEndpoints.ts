@@ -1,6 +1,6 @@
 import RestApi from '../api';
 import UserService from '../services/userService';
-import { User } from '@/shared/types/user.types';
+import { User } from '@/models/types/user.types';
 
 // API Endpoints
 // GET	/users
@@ -57,7 +57,23 @@ const usersApi = RestApi.injectEndpoints({
           return { error };
         }
       },
-      invalidatesTags: ['USERS'],
+      onQueryStarted: async (id, { dispatch, queryFulfilled }) => {
+        // Optimistically remove the user from the cache
+        const patchResult = dispatch(
+          util.updateQueryData('getUsers', undefined, (users) => {
+            const index = users.findIndex((u) => u.id === id);
+            if (index !== -1) {
+              users.splice(index, 1);
+            }
+          }),
+        );
+        try {
+          await queryFulfilled;
+        } catch (error) {
+          patchResult.undo();
+        }
+      },
+      // invalidatesTags: ['USERS'],
     }),
 
     createUser: builder.mutation<User, User>({
@@ -77,8 +93,8 @@ const usersApi = RestApi.injectEndpoints({
 
           // Update optimistically the user data
           dispatchResult = dispatch(
-            util.updateQueryData('getUsers', undefined, (draft) => {
-              draft.push(res.data);
+            util.updateQueryData('getUsers', undefined, (users) => {
+              users.push(res.data);
             }),
           );
         } catch (error) {
@@ -86,7 +102,6 @@ const usersApi = RestApi.injectEndpoints({
           dispatchResult.undo();
         }
       },
-      invalidatesTags: ['USERS'],
     }),
   }),
 });
@@ -99,7 +114,7 @@ export const {
   useUpdateUserMutation,
   useDeleteUserMutation,
   useCreateUserMutation,
-  useLazyGetOneUserQuery
+  useLazyGetOneUserQuery,
 } = usersApi;
 
 export default usersApi;

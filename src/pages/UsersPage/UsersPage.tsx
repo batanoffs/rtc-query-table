@@ -1,36 +1,25 @@
-import { Flex, Modal } from 'antd';
-import React, { useState } from 'react';
+import { Flex } from 'antd';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
 
-import AddUserForm from './AddNewUserForm';
+import UserTable from './components/table/UsersTable';
+import { selectSelectedUserId } from '@/store/slices/usersSlicer';
+import { UserModalForm } from './components/modal/UserModalForm';
 
-type UsersPageProps = {
-  Table: React.ComponentType<any>;
-};
-
-const UsersPage: React.FC<UsersPageProps> = ({ Table: TableComponent }) => {
-  const [isOpen, setOpen] = useState<boolean>();
-
-  const toggleOpenClose = () => {
-    setOpen((prev) => !prev);
-  };
+const UsersPage: React.FC = () => {
+  const [isOpen, setOpen] = useState<boolean>(false);
+  const selectedUserId = useSelector(selectSelectedUserId);
 
   return (
     <Flex justify="center" align="center">
-      <TableComponent toggleOpenClose={toggleOpenClose} />
+      <UserTable setOpen={setOpen} />
 
-      <Modal
-        title="Add New User"
-        closable={{ 'aria-label': 'Custom Close Button' }}
-        open={isOpen}
-        onOk={toggleOpenClose}
-        centered
-        footer={null}
-        maskClosable={true}
-        keyboard
-        onCancel={toggleOpenClose}
-      >
-        <AddUserForm setIsModalOpen={toggleOpenClose} />
-      </Modal>
+      <UserModalForm
+        userId={selectedUserId ?? undefined}
+        isEditMode={!!selectedUserId}
+        isOpen={isOpen}
+        setOpen={setOpen}
+      />
     </Flex>
   );
 };

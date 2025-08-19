@@ -1,22 +1,23 @@
-import React, { MouseEventHandler, useState } from 'react';
-import { Button, Flex, Table, TableProps } from 'antd';
+import React, { useState } from 'react';
+import { Button, Flex, Result, Table, TableProps } from 'antd';
 
-import TableColumns from './tableColumns';
-import { useGetUsersQuery } from '../../api/endpoints/userEndpoints';
-import { User } from '@/shared/types/user.types';
+import { User } from '@/models/types/user.types';
+import { useGetUsersQuery } from '@/api/endpoints/userEndpoints';
+import getTableColumns from './tableColumns';
+import { useDispatch } from 'react-redux';
 
 type TableRowSelection<T extends object = object> = TableProps<T>['rowSelection'];
 
 type UserTableProps = {
-  toggleOpenClose: MouseEventHandler<HTMLElement>;
+  setOpen: (state: boolean) => void;
 };
 
-const UserTable: React.FC<UserTableProps> = ({ toggleOpenClose }) => {
+const UserTable: React.FC<UserTableProps> = ({ setOpen }) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const { data, isLoading, isError } = useGetUsersQuery();
+  const dispatch = useDispatch();
 
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
-    console.log('selectedRowKeys changed: ', newSelectedRowKeys);
     setSelectedRowKeys(newSelectedRowKeys);
   };
 
@@ -28,7 +29,17 @@ const UserTable: React.FC<UserTableProps> = ({ toggleOpenClose }) => {
   const hasSelected = selectedRowKeys.length > 0;
 
   if (isError) {
-    // return <Alert/>
+    return (
+      <Result
+        status="error"
+        title="There are some problems with your operation."
+        extra={
+          <Button type="primary" key="console">
+            Go Console
+          </Button>
+        }
+      />
+    );
   }
 
   return (
@@ -37,7 +48,7 @@ const UserTable: React.FC<UserTableProps> = ({ toggleOpenClose }) => {
         <Button
           type="primary"
           style={{ maxWidth: '10em', alignSelf: 'end', marginBottom: '1em' }}
-          onClick={toggleOpenClose}
+          onClick={() => setOpen(true)}
         >
           Add New User
         </Button>
@@ -46,7 +57,7 @@ const UserTable: React.FC<UserTableProps> = ({ toggleOpenClose }) => {
 
         <Table<User>
           rowSelection={rowSelection}
-          columns={TableColumns}
+          columns={getTableColumns({ setOpen, dispatch })}
           dataSource={data}
           loading={isLoading}
           pagination={{ position: ['bottomCenter'], pageSize: 10, showSizeChanger: true }}
