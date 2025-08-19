@@ -74,11 +74,7 @@ const getTableColumns = ({ setOpen, dispatch }: TableColumnProps): TableColumn[]
       title: 'Company',
       dataIndex: 'company',
       key: 'company',
-      render: (_: string, record: User) => {
-        return record.company && typeof record.company === 'object' && 'name' in record.company
-          ? (record.company as { name: string }).name
-          : 'N/A';
-      },
+      render: (_: string, record: User) => record.company?.name || 'N/A',
     },
     {
       title: 'Actions',
