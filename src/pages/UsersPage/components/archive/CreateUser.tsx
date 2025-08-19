@@ -1,7 +1,7 @@
 import { FC, MouseEvent } from 'react';
 import { Modal } from 'antd';
+import AddUserModal from './AddUserModal';
 
-import AddUserModal from '../AddUserModal';
 
 type CreateModalProps = {
   toggleOpenClose: (event: MouseEvent<HTMLButtonElement>) => void;
