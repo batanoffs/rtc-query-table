@@ -10,7 +10,6 @@ import { setSelectedUserId } from '@/store/slices/usersSlicer';
 
 type EditUserModalProps = {
   userId?: number;
-  isEditMode: boolean;
   isOpen: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -21,6 +20,7 @@ export const UserModalForm: React.FC<EditUserModalProps> = ({ userId, isOpen, se
     isUserLoading,
     isCreating,
     isFetchUserError,
+    // TODO how to handle error states
     isUpdatingError,
     isCreatingError,
     submitCreateUser,
@@ -28,7 +28,7 @@ export const UserModalForm: React.FC<EditUserModalProps> = ({ userId, isOpen, se
     fetchAndSetUserData,
   } = useFetchUpdateUser();
 
-  const { formData, isDisabled, onChange, setFormData, handleSubmit } = useForm(initialUserValues);
+  const { formData, isDisabled, onChange, setFormData, setIsDisabled, handleSubmit } = useForm(initialUserValues);
   const dispatch = useDispatch();
 
   const isEditMode = !!userId;
@@ -60,6 +60,7 @@ export const UserModalForm: React.FC<EditUserModalProps> = ({ userId, isOpen, se
     setOpen(false);
     setFormData(initialUserValues);
     dispatch(setSelectedUserId(null));
+    setIsDisabled(true);
   };
 
   const fetchUser = useCallback(() => {
@@ -70,7 +71,6 @@ export const UserModalForm: React.FC<EditUserModalProps> = ({ userId, isOpen, se
     if (userId && isOpen) fetchUser();
   }, [userId, isOpen]);
 
-  // TODO if no id is passed change the form to add user
   return (
     <Modal
       title={isEditMode ? `Edit User: ${formData.name}` : 'Add User'}

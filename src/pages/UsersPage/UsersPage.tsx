@@ -16,7 +16,6 @@ const UsersPage: React.FC = () => {
 
       <UserModalForm
         userId={selectedUserId ?? undefined}
-        isEditMode={!!selectedUserId}
         isOpen={isOpen}
         setOpen={setOpen}
       />
