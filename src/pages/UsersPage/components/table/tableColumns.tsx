@@ -1,21 +1,24 @@
 import React from 'react';
+import { Button } from 'antd';
+import { EditFilled } from '@ant-design/icons';
 
 import { User } from '@/models/types/user.types';
-import { EditUserModal } from '../modal/EditUserModal';
 import DeleteUserModal from '../modal/DeleteUserModal';
+import { setSelectedUserId } from '@/store/slices/usersSlicer';
 
-type TableColumns = {
+type TableColumn = {
   title: string;
   dataIndex?: keyof User;
   key: string;
   render?: (text: string, record: User) => React.ReactNode;
-}[];
-
-type TableColumnProps = {
-  toggleOpen?: (state: boolean) => void;
 };
 
-const TableColumns = (toggleOpen: TableColumnProps): TableColumns => {
+type TableColumnProps = {
+  setOpen: (state: boolean) => void;
+  dispatch: (action: any) => void;
+};
+
+const getTableColumns = ({ setOpen, dispatch }: TableColumnProps): TableColumn[] => {
   return [
     {
       title: 'ID',
@@ -80,13 +83,23 @@ const TableColumns = (toggleOpen: TableColumnProps): TableColumns => {
     {
       title: 'Actions',
       key: 'actions',
-      render: (_, rowData) => (
-        <div style={{ display: 'flex', gap: '8px' }} onClick={(e) => e.stopPropagation()}>
-          <EditUserModal userId={rowData.id} />
-          <DeleteUserModal userId={rowData.id} userName={rowData.name} />
-        </div>
-      ),
+      render: (_, rowData) => {
+        const handleEditClick = () => {
+          dispatch(setSelectedUserId(rowData.id));
+          setOpen(true);
+        };
+
+        return (
+          <div style={{ display: 'flex', gap: '8px' }} onClick={(e) => e.stopPropagation()}>
+            <Button icon={<EditFilled />} onClick={handleEditClick}>
+              Edit
+            </Button>
+            <DeleteUserModal userId={rowData.id} userName={rowData.name} />
+          </div>
+        );
+      },
     },
   ];
 };
-export default TableColumns;
+
+export default getTableColumns;
