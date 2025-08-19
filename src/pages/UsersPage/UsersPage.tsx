@@ -13,7 +13,6 @@ const UsersPage: React.FC = () => {
   return (
     <Flex justify="center" align="center">
       <UserTable setOpen={setOpen} />
-      {/* <CreateUserModal toggleOpenClose={toggleOpenClose} isOpen={isOpen} /> */}
 
       <UserModalForm
         userId={selectedUserId ?? undefined}
