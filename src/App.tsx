@@ -1,13 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 import { FC } from 'react';
 
-import { MainLayout } from './layout/MainLayout';
-import { Footer } from './layout/Footer';
+import { ThemeProvider, ModalProvider, NotificationProvider } from './theme/providers';
+import { MainLayout, Footer } from './layout';
 import UsersPage from './pages/UsersPage/UsersPage';
-import { ThemeProvider } from './theme/providers/ThemeProvider';
 import GlobalErrorHandler from './components/utils/GlobalErrorHandler';
-import ModalProvider from './theme/providers/Modal/ModalProvider';
-import { NotificationProvider } from './theme/providers/Notification/NotificationProvider';
 
 const App: FC = () => {
   const navigate = useNavigate();
