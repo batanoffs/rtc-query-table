@@ -1,5 +1,5 @@
 import { Modal } from 'antd';
-import { FC, ReactNode, useEffect } from 'react';
+import { FC, ReactNode, useEffect, useState } from 'react';
 import { ModalContext } from './ModalContext';
 import ModalService from './ModalService';
 
@@ -10,9 +10,13 @@ export const ModalProvider: FC<{ children: ReactNode }> = ({ children }) => {
     ModalService.setModalApi(modalApi);
   }, [modalApi]);
 
+  // Pass toggleOpenClose in context value
+  const contextValue = {
+    ...modalApi,
+  };
 
   return (
-    <ModalContext.Provider value={modalApi}>
+    <ModalContext.Provider value={contextValue}>
       {contextHolder}
       {children}
     </ModalContext.Provider>
