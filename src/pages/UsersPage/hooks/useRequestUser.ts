@@ -1,27 +1,37 @@
-import { useLazyGetOneUserQuery, useUpdateUserMutation } from '@/api/endpoints/userEndpoints';
+import { useCreateUserMutation, useLazyGetOneUserQuery, useUpdateUserMutation } from '@/api/endpoints/userEndpoints';
 import useModal from '@/hooks/useModal';
 import { User } from '@/models/types/user.types';
 
 export const useFetchUpdateUser = () => {
-  const [updateUser, { isLoading }] = useUpdateUserMutation();
-  const [fetchUser, { data, isLoading: isUserLoading, isError }] = useLazyGetOneUserQuery();
+  const [updateUser, { isLoading: isUpdating, isError: isUpdatingError }] = useUpdateUserMutation();
+  const [createUser, { isLoading: isCreating, isError: isCreatingError }] = useCreateUserMutation();
+  const [fetchUser, { data, isLoading: isUserLoading, isError: isFetchUserError }] = useLazyGetOneUserQuery();
   const { notification } = useModal();
 
-  const onEdit = async (
+  const submitCreateUser = async (formData: User, setModalOpenClose: React.Dispatch<React.SetStateAction<boolean>>) => {
+    try {
+      await createUser(formData).unwrap();
+      setModalOpenClose(false);
+      notification.success({ message: 'User created successfully' });
+    } catch (error) {
+      console.error('Error creating user:', error);
+
+      if (error instanceof Error) {
+        notification.error({ message: error.message });
+      } else {
+        notification.error({ message: 'Whops, something went wrong' });
+      }
+    }
+  };
+
+  const submitUserChanges = async (
     formData: User,
     userId: number,
     setModalOpenClose: React.Dispatch<React.SetStateAction<boolean>>,
   ) => {
-    // Try to update the user data
     try {
-      // replace with ------------- useValidate()
-      // if (!formData.name || !formData.email || !formData.username || !formData.phone) throw new Error('Required fields are empty!');
-      // if (!userId) throw new Error('User id not found. Please refresh the page');
-
       await updateUser({ id: userId, user: formData });
-
       setModalOpenClose(false);
-
       notification.success({ message: 'Success' });
     } catch (error) {
       console.error('Error updating user:', error);
@@ -35,13 +45,13 @@ export const useFetchUpdateUser = () => {
   };
 
   // Callback func to trigger data fetch
-  const fetchUserDataById = async (userId: number, setFormData: React.Dispatch<React.SetStateAction<User>>) => {
+  const fetchAndSetUserData = async (userId: number, setFormData: React.Dispatch<React.SetStateAction<User>>) => {
     if (!userId) return;
 
     try {
       const userData = await fetchUser(userId).unwrap();
 
-      if (userData) {
+      if (userData)
         setFormData({
           id: userData.id,
           name: userData.name || '',
@@ -59,11 +69,9 @@ export const useFetchUpdateUser = () => {
             zipcode: userData.address?.zipcode || '',
           },
         });
-      }
-    } catch (error) {
-      notification.error({
-        message: `Failed to fetch data for user ${userId}`,
-      });
+    } 
+    catch (error) {
+      notification.error({ message: `Failed to fetch data for user ${userId}` });
 
       if (error instanceof Error) {
         console.error(error.message);
@@ -74,10 +82,14 @@ export const useFetchUpdateUser = () => {
   };
 
   return {
-    isLoading,
+    isUpdating,
+    isUpdatingError,
     isUserLoading,
-    isError,
-    onEdit,
-    fetchUserDataById,
+    isFetchUserError,
+    isCreating,
+    isCreatingError,
+    submitCreateUser,
+    submitUserChanges,
+    fetchAndSetUserData,
   };
 };
