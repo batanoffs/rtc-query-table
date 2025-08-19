@@ -5,6 +5,7 @@ export const useForm = (initialState: User) => {
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
   const [formData, setFormData] = useState<User>(initialState);
 
+  // Function to handle form submission, utilize currying
   const handleSubmit = (onSubmit: (data: User) => void) => (event: React.FormEvent<SubmitEvent>) => {
     onSubmit(formData);
     resetFormHandler(event);
@@ -13,7 +14,6 @@ export const useForm = (initialState: User) => {
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
-    // Set state
     setFormData((prev) => {
       // Get nested keys by splitting
       const keys = name.split('.');
@@ -41,9 +41,7 @@ export const useForm = (initialState: User) => {
   };
 
   const resetFormHandler = (event?: React.FormEvent<SubmitEvent>) => {
-    if (event) {
-      setFormData(initialState);
-    }
+    if (event) setFormData(initialState);
   };
 
   return {
