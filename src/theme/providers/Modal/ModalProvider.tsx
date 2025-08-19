@@ -1,5 +1,5 @@
 import { Modal } from 'antd';
-import { FC, ReactNode, useEffect, useState } from 'react';
+import { FC, ReactNode, useEffect } from 'react';
 import { ModalContext } from './ModalContext';
 import ModalService from './ModalService';
 
@@ -22,5 +22,3 @@ export const ModalProvider: FC<{ children: ReactNode }> = ({ children }) => {
     </ModalContext.Provider>
   );
 };
-
-export default ModalProvider;
