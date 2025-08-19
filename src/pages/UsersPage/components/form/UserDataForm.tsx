@@ -26,11 +26,10 @@ const UserDataForm: React.FC<CreateEditFormProps> = ({
       onFinish={handleSubmit}
       key={formData.id}
     >
-      {/* onFinishFailed={onFinishFailed} */}
       <Row gutter={16}>
         <Col span={12}>
           <Form.Item name="name" label="Name" rules={[{ required: true }]}>
-            <Input />
+            <Input id="name" name="name" value={formData.name} />
           </Form.Item>
         </Col>
         <Col span={12}>
@@ -43,12 +42,12 @@ const UserDataForm: React.FC<CreateEditFormProps> = ({
       <Row gutter={16}>
         <Col span={12}>
           <Form.Item name="email" label="Email" rules={[{ required: true, type: 'email' }]}>
-            <Input />
+            <Input id="email" name="email" value={formData.email} />
           </Form.Item>
         </Col>
         <Col span={12}>
           <Form.Item name="phone" label="Phone" rules={[{ required: true }]}>
-            <Input />
+            <Input id="phone" name="phone" value={formData.phone} />
           </Form.Item>
         </Col>
       </Row>
@@ -56,12 +55,12 @@ const UserDataForm: React.FC<CreateEditFormProps> = ({
       <Row gutter={16}>
         <Col span={12}>
           <Form.Item name="website" label="Website">
-            <Input />
+            <Input id="website" name="website" value={formData.website} />
           </Form.Item>
         </Col>
         <Col span={12}>
           <Form.Item name={['company', 'name']} label="Company Name">
-            <Input />
+            <Input id="company-name" name="company.name" value={formData.company?.name ?? ''} />
           </Form.Item>
         </Col>
       </Row>
@@ -69,12 +68,12 @@ const UserDataForm: React.FC<CreateEditFormProps> = ({
       <Row gutter={16}>
         <Col span={12}>
           <Form.Item name={['address', 'street']} label="Street">
-            <Input />
+            <Input id="address-street" name="address.street" value={formData.address?.street ?? ''} />
           </Form.Item>
         </Col>
         <Col span={12}>
           <Form.Item name={['address', 'suite']} label="Suite">
-            <Input />
+            <Input id="address-suite" name="address.suite" value={formData.address?.suite ?? ''} />
           </Form.Item>
         </Col>
       </Row>
@@ -82,12 +81,12 @@ const UserDataForm: React.FC<CreateEditFormProps> = ({
       <Row gutter={16}>
         <Col span={12}>
           <Form.Item name={['address', 'city']} label="City">
-            <Input />
+            <Input id="address-city" name="address.city" value={formData.address?.city ?? ''} />
           </Form.Item>
         </Col>
         <Col span={12}>
           <Form.Item name={['address', 'zipcode']} label="Zipcode">
-            <Input />
+            <Input id="address-zipcode" name="address.zipcode" value={formData.address?.zipcode ?? ''} />
           </Form.Item>
         </Col>
       </Row>
