@@ -9,6 +9,7 @@ export const useForm = (initialState: User) => {
   const handleSubmit = (onSubmit: (data: User) => void) => (event: React.FormEvent<SubmitEvent>) => {
     onSubmit(formData);
     resetFormHandler(event);
+    setIsDisabled(true);
   };
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,6 +48,7 @@ export const useForm = (initialState: User) => {
   return {
     formData,
     isDisabled,
+    setIsDisabled,
     onChange,
     handleSubmit,
     setFormData,
